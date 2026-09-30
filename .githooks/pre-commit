@@ -1,0 +1,7 @@
+#!/bin/sh
+# Catch basic failures before creating a commit. CI remains the merge gate.
+set -e
+
+echo "pre-commit: running DateBloom typecheck and lint..."
+pnpm typecheck
+pnpm lint

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Run the same core tests locally before code is pushed.
+set -e
+
+echo "pre-push: running DateBloom tests..."
+pnpm test

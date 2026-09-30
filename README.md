@@ -72,6 +72,9 @@ Account creation does not send email. Passwords use scrypt hashes, and account s
 - `pnpm dev` — start the website
 - `pnpm --filter @datebloom/web build` — production build
 - `pnpm lint`, `pnpm typecheck`, `pnpm test` — quality checks
+- `pnpm hooks` — enable the local pre-commit and pre-push checks
+
+Pull requests are required for changes to `main`. GitHub Actions runs typecheck, lint, tests, the production build, and a full-history secret scan for every pull request. Create a feature branch, run `pnpm hooks` once, and open a pull request instead of pushing directly to `main`.
 
 SQLite is currently intended for development on one machine and one app instance. Production hosting/storage is a later milestone.
 
