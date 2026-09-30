@@ -9,8 +9,8 @@ const registry = { restaurants: [
   { license: 'SEA2', name: 'Other Restaurant', street: '1611 W SWANN AVE', city: 'TAMPA', warnings: [], archived: false },
   { license: 'SEA3', name: 'Closed Place', street: '5 MAIN ST', city: 'TAMPA', warnings: ['Inactive secondary status'], archived: false },
 ] };
-const feature = (id, name, street, overrides = {}) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [-82.4, 27.9] }, properties: {
-  id, names: { primary: name }, taxonomy: { primary: 'restaurant' },
+const feature = (id, name, street, overrides = {}) => ({ id, type: 'Feature', geometry: { type: 'Point', coordinates: [-82.4, 27.9] }, properties: {
+  names: { primary: name }, taxonomy: { primary: 'restaurant' },
   addresses: [{ freeform: street, locality: 'Tampa', region: 'FL' }], websites: ['https://example.com'], ...overrides,
 } });
 const data = (...features) => JSON.stringify({ type: 'FeatureCollection', features });

@@ -34,7 +34,8 @@ function recordsFromGeojson(raw) {
 }
 function placeFromFeature(feature) {
   const props = feature?.properties;
-  if (feature?.type !== 'Feature' || !props || typeof props.id !== 'string') return null;
+  const id = feature?.id ?? props?.id;
+  if (feature?.type !== 'Feature' || !props || typeof id !== 'string') return null;
   const category = props.taxonomy?.primary ?? props.category ?? props.categories?.primary ?? '';
   if (!/(restaurant|casual_eatery|fast_food)/i.test(category)) return null;
   if (props.operating_status === 'permanently_closed') return null;
@@ -43,7 +44,7 @@ function placeFromFeature(feature) {
   const street = address.freeform ?? props.address ?? '';
   const city = address.locality ?? props.locality ?? '';
   if (!name || !street || !city) return null;
-  return { id: props.id, name, street, city, region: address.region ?? null, category,
+  return { id, name, street, city, region: address.region ?? null, category,
     website: Array.isArray(props.websites) ? props.websites.find(url => typeof url === 'string' && url.startsWith('https://')) ?? null : null,
     confidence: typeof props.confidence === 'number' ? props.confidence : null };
 }
