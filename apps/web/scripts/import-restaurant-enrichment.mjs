@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { open, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
-import { mergeEnrichment } from '../lib/restaurant-directory.mjs';
+import { mergeEnrichment } from '../lib/restaurant-enrichment.mjs';
 
 const enrichmentPath = fileURLToPath(new URL('../../../data/restaurant-enrichment.json', import.meta.url));
 const registryPath = fileURLToPath(new URL('../../../data/restaurant-registry.json', import.meta.url));

@@ -1,5 +1,5 @@
 import enrichmentFile from "../../../data/restaurant-enrichment.json";
-import { validateEnrichment } from "./restaurant-directory.mjs";
+import { validateEnrichment } from "./restaurant-enrichment.mjs";
 import type { CatalogVenue } from "./venue-catalog";
 
 type EnrichmentRecord = {

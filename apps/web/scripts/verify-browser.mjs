@@ -38,8 +38,6 @@ function prepareWorkspace() {
   }
   mkdirSync(path.join(fixtureRoot, "data"));
   cpSync(path.join(projectRoot, "data/restaurant-enrichment.json"), path.join(fixtureRoot, "data/restaurant-enrichment.json"));
-  if (existsSync(path.join(projectRoot, "data/restaurant-registry.json")))
-    cpSync(path.join(projectRoot, "data/restaurant-registry.json"), path.join(fixtureRoot, "data/restaurant-registry.json"));
   for (const relative of ["node_modules", "apps/web/node_modules", "packages/contracts/node_modules", "packages/planning/node_modules"]) {
     const source = path.join(projectRoot, relative);
     if (existsSync(source)) symlinkSync(source, path.join(fixtureRoot, relative), process.platform === "win32" ? "junction" : "dir");
@@ -198,16 +196,6 @@ async function run() {
   await pageB.setViewport({ width: 390, height: 844 });
   const { preferred, alternative } = futureDates();
   let created;
-
-  await check("Restaurant directory searches the DBPR snapshot without claiming planner eligibility", async () => {
-    await pageB.goto(baseUrl + "/restaurants?q=NUEVA+CANTINA", { waitUntil: "networkidle2" });
-    await pageB.waitForSelector(".directory-card");
-    assert.match(await pageB.$eval(".directory-count", element => element.textContent), /discovery records/);
-    assert.match(await pageB.$eval(".directory-card", element => element.textContent), /Not reviewed/);
-    assert.equal(await pageB.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
-    await pageB.goto(baseUrl + "/restaurants?q=NONEXISTENT-RESTAURANT-XYZ", { waitUntil: "networkidle2" });
-    assert.match(await pageB.$eval(".directory-empty", element => element.textContent), /No matching records/);
-  });
 
   await check("Required steps block incomplete answers", async () => {
     await pageA.goto(baseUrl + "/request", { waitUntil: "networkidle2" });

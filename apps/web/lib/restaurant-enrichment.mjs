@@ -43,14 +43,3 @@ export function mergeEnrichment(current, updates, snapshot) {
   }
   return validateEnrichment({ version: 1, records: [...merged.values()].sort((a, b) => a.license.localeCompare(b.license)) });
 }
-
-export function directorySearch(snapshot, enrichment, { search = '', city = 'TAMPA', page = 1, pageSize = 24 } = {}) {
-  const byLicense = new Map(enrichment.records.map(row => [row.license, row]));
-  const query = search.trim().toLocaleLowerCase();
-  const rows = (snapshot?.restaurants ?? []).filter(row => !row.archived && !row.variants && (!city || row.city?.toUpperCase() === city.toUpperCase()))
-    .filter(row => !query || `${row.name} ${row.street} ${row.license}`.toLocaleLowerCase().includes(query));
-  const count = rows.length;
-  const pageCount = Math.max(1, Math.ceil(count / pageSize));
-  const safePage = Math.min(Math.max(1, page), pageCount);
-  return { count, page: safePage, pageCount, rows: rows.slice((safePage - 1) * pageSize, safePage * pageSize).map(row => ({ ...row, enrichment: byLicense.get(row.license) ?? null })) };
-}

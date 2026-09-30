@@ -8,7 +8,7 @@ export default function Home() {
       <div className="sunset-scene">
       <header className="site-header">
         <Link className="wordmark" href="/" aria-label="Date Night Tampa home"><span className="wordmark-mark">d</span><span>Date night<span className="wordmark-city">Tampa</span></span></Link>
-        <nav className="site-nav" aria-label="Main navigation"><a href="#how-it-works">How it works</a><Link href="/restaurants">Restaurants</Link><Link href="/login">Sign in</Link><Link className="button button-small" href="/request">Start planning <span aria-hidden="true">↗</span></Link></nav>
+        <nav className="site-nav" aria-label="Main navigation"><a href="#how-it-works">How it works</a><Link href="/login">Sign in</Link><Link className="button button-small" href="/request">Start planning <span aria-hidden="true">↗</span></Link></nav>
       </header>
       <section className="hero">
         <HeroBackdrop />

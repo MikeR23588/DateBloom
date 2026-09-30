@@ -19,7 +19,7 @@ Offline imports accept an existing CSV without modifying it:
 pnpm restaurants:refresh --input "D:\Michael\Programming\Projects\tampa\catalog\hrfood3.csv"
 ```
 
-That path is an example from the neighboring project, not a runtime dependency. Offline imports explicitly have unknown source freshness. The generated snapshot is `data/restaurant-registry.json`, ignored by version control. The app reads it for the public, searchable `/restaurants` discovery directory; it does not alter the SQLite database or directly supply the itinerary generator. Deployments need their own refreshed snapshot, or the directory shows a setup message.
+That path is an example from the neighboring project, not a runtime dependency. Offline imports explicitly have unknown source freshness. The generated snapshot is `data/restaurant-registry.json`, ignored by version control. It is an internal review source, not a customer-facing page. It does not alter the SQLite database or directly supply the itinerary generator; the import command uses it to check enrichment licenses.
 
 ## Source and scope
 
