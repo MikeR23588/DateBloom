@@ -44,6 +44,21 @@ The snapshot records a content SHA-256, import timestamp, acquisition method and
 
 ## Bulk enrichment and planner promotion
 
+### Open bulk discovery queue
+
+Overture Places is a downloadable, open-licensed source of place names, addresses, categories and optional websites. Install the [Overture Python client](https://docs.overturemaps.org/getting-data/) separately (`pip install overturemaps`), then obtain a Tampa-area GeoJSON `place` extract (for example, `overturemaps download --bbox=-82.60,27.80,-82.30,28.10 --type=place -f geojson -o tampa-places.geojson`). Record the release ID from the [Overture catalog](https://stac.overturemaps.org/catalog.json), then run:
+
+```powershell
+pnpm restaurants:refresh
+pnpm restaurants:bulk-review --input .\tampa-places.geojson --release 2026-09-23.1
+```
+
+Replace the example release with the actual extract's release; the CLI cannot infer it from GeoJSON. The command reads the local DBPR snapshot and the Overture extract, and writes ignored `data/restaurant-review-queue.json` for internal use only. It considers Tampa/Florida restaurant-like categories and requires the normalized branch name **and** street to match uniquely. Duplicate place IDs, mismatches, flagged DBPR licenses and previously reviewed records stay distinct. A candidate match is a research lead, not verified identity. The queue lists evidence links and every remaining planning fact; it never writes `restaurant-enrichment.json` or changes planner eligibility. GeoJSON over 100 MB and empty/wrong-city extracts fail without replacing the prior queue.
+
+Overture Places has no opening-hours or price-tier fields in its [current schema](https://docs.overturemaps.org/schema/v1.18.0/reference/places/place/). Category is not a verified cuisine; optional websites may be stale or point to a chain rather than this branch. The queue therefore cannot by itself meet planner promotion requirements. Review the exact branch, official hours and exceptions, and a sourced approximate price band before using `restaurants:enrich`. A weekly bulk pull can be repeated without a per-place API, but the extract has transfer/storage costs and needs a recorded release ID; this command does not install a scheduler. Overture Places uses [CDLA Permissive 2.0 / Apache 2.0](https://docs.overturemaps.org/guides/places/) terms. Keep the source and release metadata with derivative records.
+
+### Reviewed planner data
+
 `data/restaurant-enrichment.json` is versioned and separate from the DBPR snapshot. It currently contains four reviewed Hyde Park records. Import a JSON array of further reviewed records in one operation:
 
 ```powershell

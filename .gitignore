@@ -17,3 +17,6 @@ data/*.sqlite-wal
 data/restaurant-registry.json
 data/restaurant-registry.json.lock
 data/restaurant-registry.json.*.tmp
+data/restaurant-review-queue.json
+data/restaurant-review-queue.json.lock
+data/restaurant-review-queue.json.*.tmp

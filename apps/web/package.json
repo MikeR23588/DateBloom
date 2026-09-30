@@ -12,7 +12,8 @@
         "test:browser": "node scripts/verify-browser.mjs",
         "restaurants:refresh": "node scripts/refresh-restaurants.mjs",
         "restaurants:review": "node scripts/review-restaurants.mjs",
-        "restaurants:enrich": "node scripts/import-restaurant-enrichment.mjs"
+        "restaurants:enrich": "node scripts/import-restaurant-enrichment.mjs",
+        "restaurants:bulk-review": "node scripts/restaurant-bulk-review.mjs"
     },
     "dependencies": {
         "@datebloom/contracts": "workspace:*",

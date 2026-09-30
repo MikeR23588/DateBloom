@@ -6,6 +6,8 @@ The current launch market remains Tampa. New venue facts must be verified from e
 
 Pricing now uses approximate bands for new plans. Restaurant records may use a sourced band instead of an exact menu subtotal; legacy subtotals are retained for compatibility. Budget handling rejects only when the low end of the approximate range exceeds the requested budget and warns if its high end does. No third-party price API is required. The DBPR list supplies identity/discovery, not verified cuisine, hours or a price band. Internal registry search and batch enrichment import have promoted four reviewed Hyde Park restaurants; source facts still require branch-specific review before further promotion.
 
+An internal Overture Places bulk matching queue now reduces branch discovery work without metered lookups. It matches names and streets conservatively and records missing facts, but Overture does not provide hours or price tiers. No new planner restaurants are added by that queue. Batch 2 still needs official hours, price-band evidence and more activities; do not count candidate matches as coverage.
+
 ## 1. Build Batch 2: Hyde Park / SoHo
 
 This remains the next product milestone. The candidate queue exists and five restaurants / one activity are now integrated. Continue toward approximately 10–15 restaurants and 5–8 activities in Hyde Park / SoHo, prioritizing verified activity coverage and blocked restaurant evidence over raw DBPR counts.

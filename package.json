@@ -11,6 +11,7 @@
                     "restaurants:refresh": "pnpm --filter @datebloom/web restaurants:refresh",
                     "restaurants:review": "pnpm --filter @datebloom/web restaurants:review",
                     "restaurants:enrich": "pnpm --filter @datebloom/web restaurants:enrich",
+                    "restaurants:bulk-review": "pnpm --filter @datebloom/web restaurants:bulk-review",
                     "hooks": "git config core.hooksPath .githooks"
                 },
     "engines":  {
