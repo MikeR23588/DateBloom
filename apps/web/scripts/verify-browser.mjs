@@ -516,6 +516,7 @@ async function run() {
     { name: "Spanish history date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Museum", activityId: "tampa-history", start: "11:00", duration: 240, budget: 9069, description: "Tampa Bay history", viewport: { width: 390, height: 844 } },
     { name: "Spanish park date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Outdoor walk", activityId: "cotanchobee", start: "17:00", duration: 240, budget: 4900, description: "Garrison Channel", viewport: { width: 390, height: 844 } },
     { name: "Italian patio dinner", cuisine: "Italian", mealId: "bavaros-downtown", activity: "Outdoor walk", setting: "outdoors", start: "17:00", duration: 120, budget: 5940, description: "riverfront", viewport: { width: 1440, height: 900 } },
+    { name: "Hyde Park candle date", cuisine: "Italian", mealId: "forbici-tampa", activity: "Candle making", activityId: "candle-pour-hyde-park", neighborhood: "Hyde Park", mealSource: "2026-09-27", setting: "indoors", start: "15:45", end: "15:46", duration: 180, budget: 17260, description: "two hours to set", viewport: { width: 390, height: 844 } },
   ];
   const plantCoverageDate = alternative <= "2026-11-30" ? alternative : null;
   if (plantCoverageDate) expansionCases.push({ name: "Spanish Plant Museum date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Museum", activityId: "plant-museum", start: "11:00", duration: 180, budget: 7540, description: "Plant Hall", viewport: { width: 390, height: 844 } });
@@ -529,13 +530,13 @@ async function run() {
         await page.setViewport(fixture.viewport);
         await page.goto(baseUrl + "/request", { waitUntil: "networkidle2" });
         for (const [name, value] of Object.entries({ requestedLocalDate: alternative, startLocalTime: fixture.start,
-          endLocalTime: fixture.start === "11:00" ? "11:01" : "17:01", durationMinutes: String(fixture.duration) })) {
+          endLocalTime: fixture.end ?? (fixture.start === "11:00" ? "11:01" : "17:01"), durationMinutes: String(fixture.duration) })) {
           await fill(page, `[name=${name}]`, value);
         }
         await click(page, ".request-actions .button");
         await step(page, 2);
         await fill(page, "[name=budgetDollars]", String(fixture.budget / 100));
-        await page.select("[name=startingNeighborhood]", "Downtown / Water Street");
+        await page.select("[name=startingNeighborhood]", fixture.neighborhood ?? "Downtown / Water Street");
         await click(page, ".request-actions .button");
         await step(page, 3);
         await page.select("[name=atmosphere]", "relaxed");
@@ -556,7 +557,7 @@ async function run() {
         assert.ok(result.body.plan.stops[1].description.includes(fixture.description));
         assert.equal(result.body.plan.estimatedTotalCents, fixture.budget);
         assert.equal(result.body.plan.durationMinutes, fixture.duration);
-        assert.equal(result.body.plan.stops[0].sourceCheckedOn, "2026-09-29");
+        assert.equal(result.body.plan.stops[0].sourceCheckedOn, fixture.mealSource ?? "2026-09-29");
         const retry = await api(page, "POST", result.payload, result.key);
         assert.equal(retry.status, 200);
         assert.deepEqual(retry.body, result.body);

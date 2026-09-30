@@ -9,7 +9,7 @@ export const atmosphereSchema = z.enum(["relaxed", "romantic", "playful", "adven
 export const alcoholPreferenceSchema = z.enum(["no_preference", "prefer", "avoid"]);
 export const settingPreferenceSchema = z.enum(["any", "indoors", "outdoors"]);
 export const cuisineOptions = ["Italian", "Japanese", "Mexican", "Mediterranean", "American", "Seafood", "Thai", "Indian", "Vietnamese", "French", "Spanish", "Vegetarian"] as const;
-export const activityOptions = ["Live music", "Comedy", "Bowling", "Mini golf", "Arcade games", "Art class", "Museum", "Outdoor walk", "Escape room", "Board games", "Cooking class"] as const;
+export const activityOptions = ["Live music", "Comedy", "Bowling", "Mini golf", "Arcade games", "Art class", "Candle making", "Museum", "Outdoor walk", "Escape room", "Board games", "Cooking class"] as const;
 const cuisineListSchema = z.array(z.enum(cuisineOptions)).min(1, "Choose at least one cuisine.").max(cuisineOptions.length).refine((values) => new Set(values).size === values.length, "Choose each cuisine once.");
 const activityListSchema = z.array(z.enum(activityOptions)).max(activityOptions.length).refine((values) => new Set(values).size === values.length, "Choose each activity once.");
 const localTimeSchema = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use 24-hour local time, such as 18:30.");

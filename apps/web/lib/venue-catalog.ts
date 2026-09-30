@@ -1,5 +1,6 @@
 import type { DateRequestCreate } from "@datebloom/contracts";
 import { batchOneCompletionVenues } from "./venue-batch-one";
+import { batchTwoVenues } from "./venue-batch-two";
 
 export type Hours = readonly (readonly [number, number] | null)[];
 export type CatalogVenue = {
@@ -20,6 +21,7 @@ export type CatalogVenue = {
   moods: readonly DateRequestCreate["atmosphere"][];
   subtotalForTwoCents: number; costDescription: string;
   minimumMinutes: number; maximumMinutes: number;
+  startMinuteStep?: number;
 };
 export type CatalogEvent = {
   id: string; venueId: string; name: string; dates: readonly string[];
@@ -199,7 +201,7 @@ export const expansionVenues: readonly CatalogVenue[] = [
     minimumMinutes: 30, maximumMinutes: 120,
   },
 ];
-export const venues: readonly CatalogVenue[] = [...seedVenues, ...expansionVenues, ...batchOneCompletionVenues];
+export const venues: readonly CatalogVenue[] = [...seedVenues, ...expansionVenues, ...batchOneCompletionVenues, ...batchTwoVenues];
 export function restaurantCoverageSummary() {
   const restaurants = venues.filter(venue => venue.cuisines);
   return [...new Set(restaurants.map(venue => venue.neighborhood))].map(neighborhood => {

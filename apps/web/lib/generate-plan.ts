@@ -114,6 +114,7 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
               const activityLength = activityEnd - activityStart;
               if (!isOpen(meal,date,start,mealEnd)) continue;
               if (activity) {
+                if (activity.venue.startMinuteStep && activityStart % activity.venue.startMinuteStep !== 0) continue;
                 const min = activity.event ? 60 : activity.venue.minimumMinutes;
                 const max = activity.event ? activity.event.end-activity.event.start : activity.venue.maximumMinutes;
                 if (activityLength < min || activityLength > max || !isOpen(activity.venue,date,activityStart,activityEnd)) continue;

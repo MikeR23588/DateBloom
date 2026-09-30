@@ -50,4 +50,6 @@ Each new journey verifies the full requested duration, named venue IDs, source d
 
 ## Remaining limits
 
+September 30 Batch 2 first-slice run: 24 live checks passed, including an hour-aligned Hyde Park / The Candle Pour pairing and mobile saved-plan/retry journey. Report and screenshots: `.verification-tmp/run-yCyzMX/artifacts`. The earlier 23-check result remains historical.
+
 Installed dependencies are reused, so this does not verify a fresh dependency installation. Venue records are not refreshed by the test. Live routing, reservation availability, keyboard/accessibility auditing, production HTTPS/session configuration, and deployment are separate pending milestones.
