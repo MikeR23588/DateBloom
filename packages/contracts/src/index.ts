@@ -68,6 +68,7 @@ export const generatedStopSchema = z.object({
   startDayOffset: z.number().int().min(0).max(1),
   endDayOffset: z.number().int().min(0).max(1),
   suggestedBudgetCents: z.number().int().min(0),
+  priceEstimate: z.object({ lowCents: z.number().int().min(0), highCents: z.number().int().min(0), label: z.string().min(1) }).strict().refine(value => value.highCents >= value.lowCents).optional(),
 }).strict().superRefine((stop, ctx) => {
   const minute = (time: string, day: number) => day * 1440 + Number(time.slice(0, 2)) * 60 + Number(time.slice(3));
   const duration = minute(stop.endLocalTime, stop.endDayOffset) - minute(stop.startLocalTime, stop.startDayOffset);
@@ -85,7 +86,9 @@ export const generatedPlanSchema = z.object({
   stops: z.array(generatedStopSchema).min(1).max(2),
   notes: z.array(z.string()).max(8),
   adjustments: z.array(z.string()).max(8).default([]),
+  // Legacy compatibility anchor. New clients should display priceEstimate, not this point value.
   estimatedTotalCents: z.number().int().min(0),
+  priceEstimate: z.object({ lowCents: z.number().int().min(0), highCents: z.number().int().min(0) }).strict().refine(value => value.highCents >= value.lowCents).optional(),
   travel: z.object({
     mode: z.enum(["walking", "driving"]), estimatedMinutes: z.number().int().min(0).nullable(),
     scheduledBufferMinutes: z.number().int().min(0).optional(),

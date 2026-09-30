@@ -49,7 +49,7 @@ export function buildRegistry(csv, { previous = null, observedAt = new Date().to
       lastInspectionDate: row['Last Inspection Date'] || null,
       warnings, sourceUrl: SOURCE_PAGE, observedAt, archived: false,
       plannerEligible: false,
-      missingFacts: ['Official website', 'Cuisine', 'Neighborhood', 'Opening hours and exceptions', 'Menu prices for two', 'Seating / setting'],
+      missingFacts: ['Official website', 'Cuisine', 'Neighborhood', 'Opening hours and exceptions', 'Approximate price band', 'Seating / setting'],
     };
     // Conflicting source identities stay visible for review, never as a chosen branch.
     const existing = byLicense.get(license);
@@ -85,7 +85,7 @@ export function buildRegistry(csv, { previous = null, observedAt = new Date().to
     archivedCount: restaurants.filter(r => r.archived).length,
     reviewRequiredCount: restaurants.filter(r => !r.archived && r.warnings.length).length,
     conflictingLicenseCount: restaurants.filter(r => !r.archived && r.variants).length,
-    limitations: 'Discovery only. A license does not establish current opening, cuisine, hours, menu prices, seating, accessibility, or suitability. observedAt is import time, not verification time. Offline source freshness is unknown.',
+    limitations: 'Discovery only. A license does not establish current opening, cuisine, hours, price band, seating, accessibility, or suitability. observedAt is import time, not verification time. Offline source freshness is unknown.',
   }, restaurants };
 }
 

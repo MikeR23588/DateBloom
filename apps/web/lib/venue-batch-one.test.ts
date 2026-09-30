@@ -31,9 +31,9 @@ describe("batch one completion", () => {
     expect(catalog.venues.filter(venue => venue.cuisines)).toHaveLength(20);
     expect(new Set(catalog.venues.map(venue => venue.id)).size).toBe(catalog.venues.length);
   });
-  it.each(restaurants)("generates a full meal at $id's exact budget and rejects one cent less", async venue => {
+  it.each(restaurants)("generates a full meal at $id with a broad price range", async venue => {
     const { generateDatePlan, NoMatchingPlanError } = await isolatedPlanner([venue]);
-    const budget = Math.ceil(venue.subtotalForTwoCents * 130 / 100) + 1000;
+    const budget = Math.ceil(venue.subtotalForTwoCents! * 130 / 100) + 1000;
     const request = input({ preferredCuisines: [venue.cuisines![0]], settingPreference: venue.setting, budgetLimitCents: budget });
     const plan = generateDatePlan(request, now);
     expect(plan.stops[0].venueId).toBe(venue.id);
@@ -41,13 +41,14 @@ describe("batch one completion", () => {
     expect(plan.durationMinutes).toBe(120);
     expect(plan.stops[0].sourceCheckedOn).toBe("2026-09-29");
     expect(generatedPlanSchema.safeParse(plan).success).toBe(true);
-    expect(() => generateDatePlan({ ...request, budgetLimitCents: budget - 1 }, now)).toThrow(NoMatchingPlanError);
+    expect(plan.priceEstimate!.lowCents).toBeLessThanOrEqual(budget);
+    expect(() => generateDatePlan({ ...request, budgetLimitCents: plan.priceEstimate!.lowCents - 1 }, now)).toThrow(NoMatchingPlanError);
   });
   it.each(activities)("schedules $id with an actual meal and preserves exact cost", async activity => {
     const meal = catalog.expansionVenues.find(venue => venue.id === "columbia-cafe-history")!;
     const { generateDatePlan, NoMatchingPlanError } = await isolatedPlanner([meal, activity]);
     const daytime = activity.activity === "Museum";
-    const budget = 4900 + Math.ceil(activity.subtotalForTwoCents * 110 / 100);
+    const budget = 4900 + Math.ceil(activity.subtotalForTwoCents! * 110 / 100);
     const request = input({
       preferredCuisines: ["Spanish"], preferredActivities: [activity.activity], acceptsSingleStop: false,
       startWindow: daytime ? { startLocalTime: "11:00", endLocalTime: "11:01" } : { startLocalTime: "17:00", endLocalTime: "17:01" },
@@ -59,7 +60,8 @@ describe("batch one completion", () => {
     expect(plan.estimatedTotalCents).toBe(budget);
     expect(plan.durationMinutes).toBe(request.durationMinutes);
     expect(generatedPlanSchema.safeParse(plan).success).toBe(true);
-    expect(() => generateDatePlan({ ...request, budgetLimitCents: budget - 1 }, now)).toThrow(NoMatchingPlanError);
+    expect(plan.priceEstimate!.lowCents).toBeLessThanOrEqual(budget);
+    expect(() => generateDatePlan({ ...request, budgetLimitCents: plan.priceEstimate!.lowCents - 1 }, now)).toThrow(NoMatchingPlanError);
     expect(() => generateDatePlan({ ...request, travelMode: "walking" }, now)).toThrow(NoMatchingPlanError);
     expect(() => generateDatePlan({ ...request, accessibilityNeeds: "Step-free required" }, now)).toThrow(NoMatchingPlanError);
   });

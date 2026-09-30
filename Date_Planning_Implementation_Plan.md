@@ -3,6 +3,7 @@
 **Status:** In progress; named itineraries, sunset design, flexible travel, live persistence/account verification, DBPR discovery, and the first verified Mexican/Japanese downtown expansion are complete. More neighborhoods, activities and checked routes remain next.
 **Expansion update (2026-09-29):** Batch 1's catalog target is implemented: 15 additional restaurants and 8 additional activities. Overall coverage is 19 restaurants and 10 regular activities plus dated music events. See `restaurant-additions.md` and `docs/batch-one-source-reviews.md` for sources, verification and remaining limitations.
 **Batch 2 update (2026-09-30):** Hyde Park / SoHo research is underway. Green Lemon and The Candle Pour are the first promoted restaurant and activity. Overall coverage is 20 restaurants and 11 regular activities plus dated music events. The 10-15 restaurant / 5-8 activity Batch 2 target remains open. See `docs/batch-two-source-reviews.md`.
+**Pricing update (2026-09-30):** New plans display broad price ranges rather than exact restaurant bills. A restaurant record may carry a price band without an exact menu subtotal. The low end must fit the customer's budget; a range that extends above it remains eligible with a prominent warning. Legacy menu subtotals remain as internal compatibility data for existing records and saved plans, but are not shown as current price quotes. No Google Places, Yelp or other rate-limited pricing API has been added. DBPR discovery records still lack dependable cuisine, hours and price tiers, so they are not automatically scheduled.
 **Launch market:** Tampa, Florida.
 **Delivery order:** Local website → verified venue catalog → public web pilot → additional cities and mobile.
 
@@ -51,7 +52,7 @@ No container, external database service, paid AI account, or cloud account is ne
 - Rank feasible combinations by preferred date, mood, selected interests and walking time.
 - Open-to-either travel favors walks within the comfortable walking limit (15 minutes when blank), with driving considered when the walk is too long or cannot fit. Getting to the first stop is separate.
 - When requested, include a walking return to a car parked at the first stop in the full allotted duration; show return timing and directions.
-- Compare estimated costs for two including tax/tip allowances and contingency with the total cap.
+- Compare broad planning ranges for two with the total budget. Reject only when even the low end is above the cap; warn when the high end exceeds it. Do not present a precise bill as guaranteed.
 - Select only matching cuisines, activities, area and setting. Explain an unavailable match without replacing the selections. Preserve the full allotted duration and disclose unverified travel time. Keep form answers.
 - Carry ordinary food dislikes as unconfirmed ordering requests without excluding restaurants or assuming discounts. Reject unverified allergy/strict dietary and accessibility requirements instead of claiming suitability.
 - Snapshot venue facts and source timestamps when saving. Idempotent retries return the snapshot.

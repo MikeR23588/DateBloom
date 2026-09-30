@@ -4,6 +4,8 @@ This roadmap is the recommended implementation order after the local CI and repo
 
 The current launch market remains Tampa. New venue facts must be verified from exact official sources, retain review dates and expiry dates, and remain separate from discovery-only DBPR records. The planner must continue to return named, feasible itineraries or an explicit no-match result; it must not invent availability, suitability, prices, hours, routes, or booking confirmations.
 
+Pricing now uses approximate bands for new plans. Restaurant records may use a sourced band instead of an exact menu subtotal; legacy subtotals are retained for compatibility. Budget handling rejects only when the low end of the approximate range exceeds the requested budget and warns if its high end does. No third-party price API is required. The DBPR list supplies identity/discovery, not verified cuisine, hours or a price band; a separate scalable enrichment process is still needed before all listed restaurants can be scheduled.
+
 ## 1. Build Batch 2: Hyde Park / SoHo
 
 This is the next product milestone. Review the completed Batch 1 records first, then create a candidate queue for approximately 10–15 restaurants and 5–8 activities in Hyde Park / SoHo.
@@ -11,7 +13,7 @@ This is the next product milestone. Review the completed Batch 1 records first, 
 For every candidate:
 
 - Record a stable ID, exact branch, address, area, official sources, status, missing facts, next action, review date, and batch number.
-- Verify cuisine, hours and exceptions, duration, setting, age limits, prices for two, booking method, and official booking URL before promotion.
+- Verify cuisine, hours and exceptions, duration, setting, age limits, a sourced approximate price band, and the available booking method before planner promotion. Keep an unknown price band marked unknown in discovery instead of inventing one. Do not require an exact two-person menu bill or invent a reservation URL.
 - Keep blocked candidates and their reasons in the tracker rather than filling gaps with assumptions.
 - Add venue-specific catalog records, source reviews, coverage documentation, and planner/regression tests only for verified additions.
 - Keep walking routes, dynamic availability, and other unverified facts explicitly disclosed.

@@ -513,7 +513,7 @@ async function run() {
     { name: "Spanish ship museum date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Museum", activityId: "american-victory", setting: "outdoors", start: "11:00", duration: 180, budget: 8200, description: "weather-exposed", viewport: { width: 390, height: 844 } },
     { name: "Spanish free museum date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Museum", activityId: "tampa-police-museum", start: "11:00", duration: 120, budget: 4900, description: "police-history", viewport: { width: 1440, height: 900 } },
     { name: "French dinner", cuisine: "French", mealId: "boulon-water-street", activity: "Outdoor walk", start: "17:00", duration: 120, budget: 9320, description: "riverfront", viewport: { width: 1440, height: 900 } },
-    { name: "Spanish history date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Museum", activityId: "tampa-history", start: "11:00", duration: 240, budget: 9069, description: "Tampa Bay history", viewport: { width: 390, height: 844 } },
+    { name: "Spanish history date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Museum", activityId: "tampa-history", start: "11:00", duration: 240, budget: 10000, estimate: 9069, description: "Tampa Bay history", viewport: { width: 390, height: 844 } },
     { name: "Spanish park date", cuisine: "Spanish", mealId: "columbia-cafe-history", activity: "Outdoor walk", activityId: "cotanchobee", start: "17:00", duration: 240, budget: 4900, description: "Garrison Channel", viewport: { width: 390, height: 844 } },
     { name: "Italian patio dinner", cuisine: "Italian", mealId: "bavaros-downtown", activity: "Outdoor walk", setting: "outdoors", start: "17:00", duration: 120, budget: 5940, description: "riverfront", viewport: { width: 1440, height: 900 } },
     { name: "Hyde Park candle date", cuisine: "Italian", mealId: "forbici-tampa", activity: "Candle making", activityId: "candle-pour-hyde-park", neighborhood: "Hyde Park", mealSource: "2026-09-27", setting: "indoors", start: "15:45", end: "15:46", duration: 180, budget: 17260, description: "two hours to set", viewport: { width: 390, height: 844 } },
@@ -556,7 +556,7 @@ async function run() {
           assert.match(result.body.plan.travel.basis, /on-site walk/);
         }
         assert.ok(result.body.plan.stops[1].description.includes(fixture.description));
-        assert.equal(result.body.plan.estimatedTotalCents, fixture.budget);
+        assert.equal(result.body.plan.estimatedTotalCents, fixture.estimate ?? fixture.budget);
         assert.equal(result.body.plan.durationMinutes, fixture.duration);
         assert.equal(result.body.plan.stops[0].sourceCheckedOn, fixture.mealSource ?? "2026-09-29");
         const retry = await api(page, "POST", result.payload, result.key);

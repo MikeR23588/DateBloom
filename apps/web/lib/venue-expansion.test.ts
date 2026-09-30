@@ -24,7 +24,7 @@ describe("first neighborhood expansion group", () => {
     ["French", "any", "boulon-water-street", 9320],
     ["Spanish", "outdoors", "columbia-cafe-history", 4900],
     ["Italian", "outdoors", "bavaros-downtown", 5940],
-  ] as const)("generates a %s date within the exact budget", (cuisine, setting, id, budget) => {
+  ] as const)("generates a %s date with an approximate price range", (cuisine, setting, id, budget) => {
     const input = request({ preferredCuisines: [cuisine], settingPreference: setting, budgetLimitCents: budget });
     const plan = generateDatePlan(input, now);
     expect(plan.stops[0].venueId).toBe(id);
@@ -33,11 +33,11 @@ describe("first neighborhood expansion group", () => {
     expect(plan.durationMinutes).toBe(120);
     expect(plan.travel?.estimatedMinutes).toBeNull();
     expect(generatedPlanSchema.safeParse(plan).success).toBe(true);
-    expect(() => generateDatePlan({ ...input, budgetLimitCents: budget - 1 }, now)).toThrow(NoMatchingPlanError);
+    expect(() => generateDatePlan({ ...input, budgetLimitCents: plan.priceEstimate!.lowCents - 1 }, now)).toThrow(NoMatchingPlanError);
   });
 
-  it("selects the History Center for a four-hour daytime date at its exact budget", () => {
-    const input = request({ ...lunch, durationMinutes: 240, budgetLimitCents: 9069 });
+  it("prefers the History Center when the broad price range fits, and a cheaper museum when it does not", () => {
+    const input = request({ ...lunch, durationMinutes: 240, budgetLimitCents: 10000 });
     const plan = generateDatePlan(input, now);
     expect(plan.stops.map(stop => stop.venueId)).toEqual(["columbia-cafe-history", "tampa-history"]);
     expect(plan.stops[1].description).toContain("Tampa Bay history");
@@ -47,9 +47,9 @@ describe("first neighborhood expansion group", () => {
     expect(plan.travel?.estimatedMinutes).toBe(5);
     expect(plan.travel?.basis).toContain("on-site walk");
     expect(plan.estimatedTotalCents).toBe(9069);
-    const cheaper = generateDatePlan({ ...input, budgetLimitCents: 9068 }, now);
+    const cheaper = generateDatePlan({ ...input, budgetLimitCents: 8000 }, now);
     expect(cheaper.stops[1].venueId).toBe("plant-museum");
-    expect(cheaper.estimatedTotalCents).toBeLessThanOrEqual(9068);
+    expect(cheaper.priceEstimate!.lowCents).toBeLessThanOrEqual(8000);
   });
 
   it("supports an on-site walking-only history date while honoring the walking limit", () => {
@@ -112,17 +112,16 @@ describe("first neighborhood expansion group", () => {
     expect(() => generateDatePlan(request({ accessibilityNeeds: "Step-free route" }), now)).toThrow(NoMatchingPlanError);
   });
 
-  it("keeps source freshness and all notices within the response contract on an alternative date", () => {
+  it("keeps source freshness and all notices within the response contract", () => {
     const input = request({ ...lunch, requestedLocalDate: "2026-11-02", alternativeLocalDates: ["2026-11-03"],
       durationMinutes: 240, budgetLimitCents: 10540, alcoholPreference: "prefer" });
     const plan = generateDatePlan(input, new Date("2026-10-30T12:00:00Z"));
-    expect(plan.requestedLocalDate).toBe("2026-11-03");
-    expect(plan.stops[1].venueId).toBe("plant-museum");
-    expect(plan.notes.join(" ")).toContain("alternative date");
+    expect(plan.requestedLocalDate).toBe("2026-11-02");
+    expect(plan.stops[1].venueId).not.toBe("plant-museum");
     expect(plan.notes.join(" ")).toContain("due for review");
     expect(plan.notes.join(" ")).toContain("$30 allowance");
     expect(plan.notes.join(" ")).toContain("waterfront patio");
-    expect(plan.notes.join(" ")).toContain("November 30, 2026");
+    expect(plan.priceEstimate!.highCents).toBeGreaterThan(plan.priceEstimate!.lowCents);
     expect(generatedPlanSchema.safeParse(plan).success).toBe(true);
   });
 
@@ -148,8 +147,8 @@ describe("published schedule exceptions", () => {
     expect(venueHoursOnDate(venue("plant-museum"), "2026-11-30")).toBeNull();
     expect(venueHoursOnDate(venue("plant-museum"), "2026-12-01")).toBeNull();
     expect(venueHoursOnDate(venue("plant-museum"), "2027-01-05")).toBeNull();
-    expect(() => generateDatePlan(request({ ...lunch, requestedLocalDate: "2026-12-01",
-      durationMinutes: 240, budgetLimitCents: 7540 }), now)).toThrow(NoMatchingPlanError);
+    expect(generateDatePlan(request({ ...lunch, requestedLocalDate: "2026-12-01",
+      durationMinutes: 240, budgetLimitCents: 7540 }), now).stops[1].venueId).not.toBe("plant-museum");
   });
 
   it("preserves the existing Art Museum's holiday and dated closures", () => {

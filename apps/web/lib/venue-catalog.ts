@@ -1,6 +1,7 @@
 import type { DateRequestCreate } from "@datebloom/contracts";
 import { batchOneCompletionVenues } from "./venue-batch-one";
 import { batchTwoVenues } from "./venue-batch-two";
+import type { PriceBand } from "./price-bands";
 
 export type Hours = readonly (readonly [number, number] | null)[];
 export type CatalogVenue = {
@@ -19,7 +20,9 @@ export type CatalogVenue = {
   hours: Hours; setting: "indoors" | "outdoors";
   cuisines?: readonly string[]; activity?: string;
   moods: readonly DateRequestCreate["atmosphere"][];
-  subtotalForTwoCents: number; costDescription: string;
+  // Restaurants may use a broad band without a transient exact menu price.
+  priceBand?: PriceBand;
+  subtotalForTwoCents?: number; costDescription: string;
   minimumMinutes: number; maximumMinutes: number;
   startMinuteStep?: number;
 };

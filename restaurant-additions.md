@@ -121,11 +121,11 @@ For every branch, record:
 - Supported cuisine labels, with evidence for the selected categories.
 - Regular dining hours by day, closed days, published holiday exceptions, kitchen cutoffs, and seating restrictions.
 - Evidence for the enabled indoor or outdoor setting; avoid claiming patio availability from a generic chain page.
-- A reproducible meal example for two with item quantities, individual prices, subtotal, and drinks/water assumptions.
+- A sourced approximate price band for two where available. Exact itemized menu totals are optional, not a condition for promotion; disclose an unknown band rather than inventing one.
 - Direct booking link if the venue supplies one; booking availability remains unconfirmed.
 - Actual source review date, review deadline, evidence URLs, and unresolved limitations.
 
-Variable closing times, unpriced menus, unknown seating, or unresolved identity can prevent promotion. Keep such candidates in research rather than guessing. A missing DBPR record is a research issue, not automatic proof that a venue does not exist.
+Variable closing times, unknown seating, or unresolved identity can prevent promotion. An unpriced menu alone no longer blocks a restaurant if a credible approximate band is available. Keep unresolved facts explicit rather than guessing. A missing DBPR record is a research issue, not automatic proof that a venue does not exist.
 
 ### 4. Verify each activity and its potential pairings
 
@@ -142,7 +142,7 @@ Add reviewed records to `apps/web/lib/venue-catalog.ts` using stable IDs and mat
 Implementation details to preserve:
 
 - `hours` is Sunday through Saturday, indexed 0-6; entries use minutes after midnight, and `null` means closed. The current model has one interval per day. Split service, overnight hours, timed sessions, or closure exceptions may require model/scheduler changes rather than an inaccurate flattened interval.
-- Store monetary values in integer cents. Current meal estimate: `ceil(subtotalForTwoCents * 1.3) + 1000`, plus 3000 cents when alcohol is preferred. Activities use `ceil(subtotalForTwoCents * 1.1)`. These are existing allowances, not actual tax quotes. Avoid double-counting fees already included in a sourced price.
+- New restaurant records may use `priceBand` without `subtotalForTwoCents`. Price bands map to broad editorial ranges for two; they are not exact tax or tip quotes. The old subtotal calculation remains only as a compatibility anchor for existing records and snapshots. Reject a plan only when the low end of its range exceeds the budget, and warn when the high end exceeds it.
 - Set new records' own `sourceCheckedOn` and `sourceExpiresOn`; existing records commonly use a 30-day review interval. Adding venues must not re-date unreviewed older records.
 - Current cuisine and activity options are finite lists in the shared contracts. Prefer accurate existing categories; add a new option consistently across contracts, controls, and generation if necessary.
 - Restaurant neighborhood matching uses exact strings. Current choices are `Downtown / Water Street`, `Hyde Park`, and `Seminole Heights`. New areas require consistent form and city coverage updates; changing an `INSERT OR IGNORE` seed alone does not update an existing SQLite city row.
@@ -154,7 +154,7 @@ Implementation details to preserve:
 
 ### 6. Check behavior for the batch
 
-Use meaningful planner checks for successful selection, closed hours/days, exact budget boundaries, cuisine/setting enforcement, full duration, and missing routes. Verify new activity descriptions. Use future dates in Tampa's `America/New_York` timezone and explicitly dated event fixtures.
+Use meaningful planner checks for successful selection, closed hours/days, price-range lower bounds and over-budget warnings, cuisine/setting enforcement, full duration, and missing routes. Verify new activity descriptions. Use future dates in Tampa's `America/New_York` timezone and explicitly dated event fixtures.
 
 Check generated results, My Dates, persisted source snapshots, and retry behavior. Existing saved plans must retain their original venue/source snapshots. At least representative new combinations should be exercised through the live browser journey, including no-match recovery and mobile display.
 
@@ -259,3 +259,5 @@ Batch 2 started September 30: ten restaurant leads and six activity leads were q
 Batch 2 first-slice verification, September 30: typecheck, lint and 104 automated tests passed. The isolated live suite passed 24 browser checks, including an hour-aligned Hyde Park Candle Pour journey on mobile with generated result, saved snapshot, reload and idempotent retry. Artifacts: `.verification-tmp/run-yCyzMX/artifacts`. The normal local database was not used by the browser suite.
 
 Batch 2 SoHo continuation, September 30: Green Lemon adds one verified restaurant, bringing this batch to 1 restaurant / 1 activity and the overall catalog to 20 restaurants / 11 regular activities. Typecheck, lint, 106 automated tests and 25 isolated live browser checks passed. The new desktop journey pairs Green Lemon with The Candle Pour and checks the saved snapshot, reload and idempotent retry. Artifacts: `.verification-tmp/run-2rg7BL/artifacts`. The 10-15 restaurant / 5-8 activity Batch 2 target is still open.
+
+Pricing-model continuation, September 30: new plans now display broad two-person price ranges, accept a sourced restaurant `priceBand` without an exact menu subtotal, and warn rather than promise budget compliance when the range crosses the requested cap. The DBPR list remains a discovery registry because it does not supply cuisine, opening hours, seating or price bands. No Google Places, Yelp or other metered provider was integrated. Historical per-venue subtotals and the response's point-estimate field remain for saved-plan/API compatibility; new UI uses the range. The Batch 2 coverage count is unchanged. Typecheck, lint, 109 unit tests and 25 isolated browser checks passed; browser artifacts: `.verification-tmp/run-wsZKET/artifacts`.

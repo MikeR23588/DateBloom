@@ -2,7 +2,7 @@
 
 Automatic date planning for Tampa. Enter a schedule, budget, neighborhood, and preferences to get a named venue itinerary. Plans are saved locally and shown in My Dates.
 
-The generator selects specific restaurants, activities and dated concerts from sourced Tampa records. It checks published hours, your start window and estimated budget. Cuisines, area, selected activities and setting determine which venues are eligible. The itinerary must cover the full allotted duration. Travel preferences rank matches, with unmeasured route times disclosed. If the full allotted duration cannot fit, it explains why and keeps your answers. There is no generic-category fallback.
+The generator selects specific restaurants, activities and dated concerts from sourced Tampa records. It checks published hours, your start window and an approximate price range for two. A restaurant can use a broad price band without an exact menu price. The low end must fit your budget; if the high end exceeds it, the plan warns you rather than claiming the bill is guaranteed. Cuisines, area, selected activities and setting determine which venues are eligible. The itinerary must cover the full allotted duration. Travel preferences rank matches, with unmeasured route times disclosed. If the full allotted duration cannot fit, it explains why and keeps your answers. There is no generic-category fallback.
 
 ## How preferences are used
 

@@ -1,6 +1,7 @@
 import { generatedPlanSchema, type DateRequestCreate, type GeneratedPlan } from "@datebloom/contracts";
 import { catalogCheckedOn, catalogExpiresOn, restaurantCoverageSummary, venues, events, walkingBuffers, walkingBufferBasis, onSiteWalkingPairs, type CatalogVenue, type CatalogEvent } from "./venue-catalog";
 import { venueHoursOnDate } from "./venue-hours";
+import { bandFromMealSubtotal, mealBudgetRange, priceBandLabel } from "./price-bands";
 
 export class NoMatchingPlanError extends Error {
   readonly name = "NoMatchingPlanError";
@@ -19,10 +20,24 @@ function cost(venue: CatalogVenue, meal: boolean, alcohol: DateRequestCreate["al
   // Allowances, not a tax or availability quote. The meal estimate includes
   // 10% tax allowance, 20% tip, $10 contingency and optional $30 drink allowance.
   // Integer percentage numerators avoid floating-point artifacts adding a phantom cent.
-  return meal ? Math.ceil(venue.subtotalForTwoCents * 130 / 100) + 1000 + (alcohol === "prefer" ? 3000 : 0)
-    : Math.ceil(venue.subtotalForTwoCents * 110 / 100);
+  if (meal && venue.subtotalForTwoCents === undefined) {
+    if (!venue.priceBand) throw new Error(`Restaurant ${venue.id} needs a price band or legacy subtotal.`);
+    const [low, high] = mealBudgetRange(venue.priceBand, alcohol === "prefer");
+    return Math.round((low + high) / 2000) * 1000;
+  }
+  return meal ? Math.ceil((venue.subtotalForTwoCents ?? 0) * 130 / 100) + 1000 + (alcohol === "prefer" ? 3000 : 0)
+    : Math.ceil((venue.subtotalForTwoCents ?? 0) * 110 / 100);
 }
-function stop(venue: CatalogVenue, kind: "meal" | "activity", start: number, end: number, estimate: number, event?: CatalogEvent, foodPreference?: string): GeneratedPlan["stops"][number] {
+function estimateRange(venue: CatalogVenue, meal: boolean, estimate: number, alcohol: DateRequestCreate["alcoholPreference"]) {
+  if (meal) {
+    const band = venue.priceBand ?? bandFromMealSubtotal(venue.subtotalForTwoCents!);
+    const [lowCents, highCents] = mealBudgetRange(band, alcohol === "prefer");
+    return { lowCents, highCents, label: priceBandLabel[band] };
+  }
+  const spread = estimate === 0 ? 0 : Math.max(500, Math.round(estimate * 0.1 / 100) * 100);
+  return { lowCents: Math.max(0, estimate - spread), highCents: estimate + spread, label: estimate === 0 ? "Free" : "Approximate activity cost" };
+}
+function stop(venue: CatalogVenue, kind: "meal" | "activity", start: number, end: number, estimate: number, alcohol: DateRequestCreate["alcoholPreference"], event?: CatalogEvent, foodPreference?: string): GeneratedPlan["stops"][number] {
   return {
     kind, title: event ? `${event.name} — ${venue.name}` : venue.name,
     venueId: venue.id, venueName: venue.name, address: venue.address,
@@ -30,14 +45,15 @@ function stop(venue: CatalogVenue, kind: "meal" | "activity", start: number, end
     ...(venue.bookingUrl ? {bookingUrl: venue.bookingUrl} : {}),
     directionsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address)}`,
     sourceCheckedOn: venue.sourceCheckedOn ?? catalogCheckedOn,
-    description: kind === "meal" ? `Meal at ${venue.name}. ${venue.costDescription}${foodPreference ? ` ${foodPreference}` : ""}`
+    description: kind === "meal" ? `Meal at ${venue.name}. Check the current menu before ordering.${foodPreference ? ` ${foodPreference}` : ""}`
       : event ? event.description
       : venue.description ?? `Visit ${venue.name}. Check the linked visitor information before going.`,
-    costDescription: kind === "meal" ? `${venue.costDescription} Estimate includes tax/tip allowances and a $10 cushion.${foodPreference ? " Standard menu prices retained; customization and any price change are unconfirmed." : ""}`
+    costDescription: kind === "meal" ? `Price band is an approximate guide for two, not a quote or guaranteed budget. Food, drinks, tax and tip vary.${foodPreference ? " Customization and any price change are unconfirmed." : ""}`
       : venue.costDescription,
     startLocalTime: clock(start).time, endLocalTime: clock(end).time,
     startDayOffset: clock(start).dayOffset, endDayOffset: clock(end).dayOffset,
     suggestedBudgetCents: estimate,
+    priceEstimate: estimateRange(venue, kind === "meal", estimate, alcohol),
     ...(event ? {event: {id: event.id, name: event.name, sourceUrl: event.sourceUrl,
       startLocalTime: clock(event.start).time, endLocalTime: clock(event.end).time}} : {}),
   };
@@ -55,6 +71,7 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
   if (request.accessibilityNeeds.trim()) unverifiedRequirements.push("The current catalog cannot verify your accessibility requirements. No itinerary was generated; those requirements were not ignored.");
   if (unverifiedRequirements.length) reject(unverifiedRequirements);
   const restaurants = venues.filter(v => v.cuisines?.some(c => request.preferredCuisines.includes(c as DateRequestCreate["preferredCuisines"][number]))
+    && (v.priceBand !== undefined || v.subtotalForTwoCents !== undefined)
     && v.neighborhood === request.startingNeighborhood
     && (request.settingPreference === "any" || v.setting === request.settingPreference));
   if (!restaurants.length) reject([`No sourced restaurant matches ${request.preferredCuisines.join(", ")} in ${request.startingNeighborhood} with your ${request.settingPreference} setting. Current restaurant coverage: ${restaurantCoverageSummary()}. Seating coverage varies by restaurant.`]);
@@ -98,7 +115,11 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
           if (travel === undefined) { failures.add("A route estimate is missing for this combination."); continue; }
           const returnMinutes = activity && mode === "walking" && request.returnToParkedCar ? travel : 0;
           const activityCost = activity ? cost(activity.venue,false,request.alcoholPreference) : 0;
-          if (mealCost + activityCost > request.budgetLimitCents) { failures.add(`This combination needs an estimated $${((mealCost+activityCost)/100).toFixed(2)} for two, above your budget. Choose a higher budget or another covered area.`); continue; }
+          const mealRange = estimateRange(meal, true, mealCost, request.alcoholPreference);
+          const activityRange = activity ? estimateRange(activity.venue, false, activityCost, request.alcoholPreference) : {lowCents: 0, highCents: 0};
+          const lowCents = mealRange.lowCents + activityRange.lowCents;
+          const highCents = mealRange.highCents + activityRange.highCents;
+          if (lowCents > request.budgetLimitCents) { failures.add(`Even the low end of this approximate price range is above your budget. Choose a higher budget or another covered area.`); continue; }
           let found = false;
           let exactFound = false;
           let best: {score: number; plan: GeneratedPlan} | undefined;
@@ -120,8 +141,8 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
                 if (activityLength < min || activityLength > max || !isOpen(activity.venue,date,activityStart,activityEnd)) continue;
                 if (activity.event && (activityStart < activity.event.start || activityEnd > activity.event.end)) continue;
               }
-              const stops = [stop(meal,"meal",start,mealEnd,mealCost,undefined,foodPreference)];
-              if (activity) stops.push(stop(activity.venue,"activity",activityStart,activityEnd,activityCost,activity.event));
+              const stops = [stop(meal,"meal",start,mealEnd,mealCost,request.alcoholPreference,undefined,foodPreference)];
+              if (activity) stops.push(stop(activity.venue,"activity",activityStart,activityEnd,activityCost,request.alcoholPreference,activity.event));
               const route = activity ? {
                 mode, estimatedMinutes: mode === "walking" ? travel : null, scheduledBufferMinutes: travel,
                 directionsUrl: `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(meal.address)}&destination=${encodeURIComponent(activity.venue.address)}&travelmode=${mode}`,
@@ -135,7 +156,7 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
                 }} : {}),
               } : undefined;
               const notes = [
-                "Estimated costs are for two. Restaurant estimates include a 10% tax allowance, 20% tip and $10 cushion; paid activities include a 10% tax allowance.",
+                "Price ranges are broad planning guides for two, not menu quotes. Actual food, drink, tax, tip and activity prices may differ.",
                 activity ? `Between stops: ${mode === "driving" ? "drive / rideshare" : "walking"}. Travel to the first stop, transport costs, parking and optional purchases are outside this itinerary estimate.`
                   : "Travel to this stop, transport costs, parking and optional purchases are outside this itinerary estimate.",
                 ...(activity && mode === "walking" && !returnMinutes ? [`If you park at the first stop, allow about ${travel} minutes to walk back afterward; that return is not included in this date's allotted time.`] : []),
@@ -149,6 +170,7 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
                   ? ["Source records are due for review. Recheck the linked hours, menus and event listing before going."] : []),
               ];
               const adjustments: string[] = [];
+              if (highCents > request.budgetLimitCents) adjustments.push("The upper end of this estimated range exceeds your budget. Check current prices before choosing this date.");
               if (foodPreference) adjustments.push(foodPreference);
               if (activity && request.travelMode === "flexible") adjustments.push(mode === "walking"
                 ? `Walking is suggested: about ${travel} minutes between stops, within your ${walkingLimit}-minute comfortable walking limit. This is a catalog estimate, not a live route measurement.`
@@ -164,6 +186,7 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
                 requestedLocalDate: date, neighborhood: request.startingNeighborhood,
                 durationMinutes: actualDuration, adjustments, budgetLimitCents: request.budgetLimitCents,
                 estimatedTotalCents: mealCost+activityCost, stops, notes, ...(route ? {travel:route} : {}),
+                priceEstimate: {lowCents, highCents},
                 venueStatus: "venues_selected",
               });
               const candidate = {score: dateIndex*10000 + (request.durationMinutes-actualDuration)*10
@@ -173,6 +196,7 @@ export function generateDatePlan(request: DateRequestCreate, now = new Date()): 
                 + (activity ? Math.max(0,interests.indexOf(activity.event ? "Live music" : activity.venue.activity ?? "Live music"))*10 : 0) + travel
                 + (activity && request.travelMode === "flexible" && canWalk && mode === "driving" ? 100 : 0)
                 + (activity && request.maximumTravelMinutes != null && mode === "walking" ? Math.max(0,travel-request.maximumTravelMinutes)*20 : 0), plan};
+              candidate.score += Math.ceil(Math.max(0, highCents-request.budgetLimitCents) / 100) * 5;
               if (!best || candidate.score < best.score) best = candidate;
               if (!activity || actualDuration === request.durationMinutes) exactFound = true;
               found = true;

@@ -73,9 +73,10 @@ describe("expanded verified restaurant coverage", () => {
     expect(() => generateDatePlan(request({ preferredCuisines: ["Japanese"], settingPreference: "indoors", startWindow: { startLocalTime: "15:00", endLocalTime: "16:00" } }), now)).toThrow(NoMatchingPlanError);
   });
 
-  it("accepts the exact meal budget and rejects one cent below it", () => {
-    expect(generateDatePlan(request({ preferredCuisines: ["Mexican"], budgetLimitCents: 4822 }), now).estimatedTotalCents).toBe(4822);
-    expect(() => generateDatePlan(request({ preferredCuisines: ["Mexican"], settingPreference: "outdoors", budgetLimitCents: 4821 }), now)).toThrow(NoMatchingPlanError);
+  it("uses an approximate meal band and rejects budgets below its low end", () => {
+    const plan = generateDatePlan(request({ preferredCuisines: ["Mexican"], budgetLimitCents: 4822 }), now);
+    expect(plan.priceEstimate!.lowCents).toBeLessThan(plan.priceEstimate!.highCents);
+    expect(() => generateDatePlan(request({ preferredCuisines: ["Mexican"], settingPreference: "outdoors", budgetLimitCents: plan.priceEstimate!.lowCents - 1 }), now)).toThrow(NoMatchingPlanError);
   });
 
   it("enforces the documented patio setting for the meal and activity", () => {
@@ -138,7 +139,7 @@ describe("food preferences versus strict requirements", () => {
     expect(plan.stops[0].description).toContain("Foods to avoid: cheese");
     expect(plan.stops[0].description).toContain("Request these be left out");
     expect(plan.stops[0].description).toContain("has not confirmed");
-    expect(plan.stops[0].costDescription).toContain("Standard menu prices retained");
+    expect(plan.stops[0].costDescription).toContain("Price band is an approximate guide");
     expect(plan.adjustments.join(" ")).toContain("Foods to avoid: cheese");
     expect(plan.stops[1].description).not.toContain("Foods to avoid");
     expect(generatedPlanSchema.safeParse(plan).success).toBe(true);
@@ -161,7 +162,7 @@ describe("food preferences versus strict requirements", () => {
   });
 
   it("still enforces budget, cuisine, travel, and accessibility for food preferences", () => {
-    const impossible: Partial<DateRequestCreate>[] = [{ budgetLimitCents: 4000 }, { preferredCuisines: ["Thai"] }, { travelMode: "walking" }, { accessibilityNeeds: "Step-free entry" }];
+    const impossible: Partial<DateRequestCreate>[] = [{ budgetLimitCents: 100 }, { preferredCuisines: ["Thai"] }, { travelMode: "walking" }, { accessibilityNeeds: "Step-free entry" }];
     for (const overrides of impossible) {
       expect(() => generateDatePlan(request({ preferredCuisines: ["Mexican"], dietaryNeeds: "cheese", ...overrides }), now)).toThrow(NoMatchingPlanError);
     }

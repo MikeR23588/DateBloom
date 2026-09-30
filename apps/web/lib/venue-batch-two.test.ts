@@ -28,7 +28,7 @@ describe("Batch 2 Hyde Park activity", () => {
     expect(plan.durationMinutes).toBe(180);
     expect(plan.stops[1].startLocalTime).toBe("18:00");
     expect(plan.estimatedTotalCents).toBe(17260);
-    expect(() => generateDatePlan(request({ budgetLimitCents: 17259 }), now)).toThrow(NoMatchingPlanError);
+    expect(() => generateDatePlan(request({ budgetLimitCents: plan.priceEstimate!.lowCents - 1 }), now)).toThrow(NoMatchingPlanError);
     expect(() => generateDatePlan(request({ startWindow: { startLocalTime: "15:00", endLocalTime: "15:01" }, durationMinutes: 120 }), now)).toThrow(NoMatchingPlanError);
   });
   it("does not use uncertain Monday/Tuesday/Sunday hours or invent a walking route", () => {
@@ -48,7 +48,7 @@ describe("Batch 2 SoHo restaurant", () => {
     expect(plan.stops[0].sourceCheckedOn).toBe("2026-09-30");
     expect(plan.stops[0].suggestedBudgetCents).toBe(5420);
     expect(plan.estimatedTotalCents).toBe(14660);
-    expect(() => generateDatePlan(request({ preferredCuisines: ["Mexican"], budgetLimitCents: 14659 }), now)).toThrow(NoMatchingPlanError);
+    expect(() => generateDatePlan(request({ preferredCuisines: ["Mexican"], budgetLimitCents: plan.priceEstimate!.lowCents - 1 }), now)).toThrow(NoMatchingPlanError);
   });
 
   it("limits dinner to the conservative SoHo meal window and keeps unknown routes unresolved", () => {
