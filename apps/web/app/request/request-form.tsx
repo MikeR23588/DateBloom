@@ -149,7 +149,7 @@ export function RequestForm({ signedIn = false, restaurantCoverage }: { signedIn
 
   return (
     <form ref={formRef} className="request-form" noValidate onSubmit={submit} onChangeCapture={() => { setError(null); setNoMatchReasons([]); }}>
-      <p className="sample">Restaurant coverage: {restaurantCoverage}. Activities include Tampa Museum of Art, Curtis Hixon park walks, and dated downtown concerts. Seating coverage varies; other selections may return no match.</p>
+      <p className="sample">Restaurant coverage: {restaurantCoverage}. Activities include Tampa Museum of Art, Curtis Hixon park walks, Hyde Park candle making, and dated downtown concerts. Seating coverage varies; other selections may return no match.</p>
       <p className="sample">Required fields are marked. Your itinerary appears immediately and does not book a venue.</p>
       <ol className="request-progress" aria-label="Request steps">{steps.map((label, index) => <li key={label} aria-current={step === index ? "step" : undefined}>{index + 1}. {label}</li>)}</ol>
       <fieldset className="request-step" hidden={step !== 0} disabled={busy}>
