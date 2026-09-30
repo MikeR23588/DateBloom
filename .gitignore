@@ -1,5 +1,7 @@
 node_modules/
 .next/
+apps/web/AGENTS.md
+apps/web/CLAUDE.md
 .turbo/
 *.tsbuildinfo
 coverage/
