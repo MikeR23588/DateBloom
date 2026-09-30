@@ -90,7 +90,7 @@ export function buildRegistry(csv, { previous = null, observedAt = new Date().to
 }
 
 async function download(fetchImpl) {
-  const response = await fetchImpl(SOURCE_URL, { signal: AbortSignal.timeout(120_000), headers: { 'User-Agent': 'DatePlannerLocal/1.0' } });
+  const response = await fetchImpl(SOURCE_URL, { signal: AbortSignal.timeout(120_000), headers: { 'User-Agent': 'DateBloomLocal/1.0' } });
   if (!response.ok) throw new Error(`DBPR returned HTTP ${response.status}; previous snapshot kept.`);
   if (!response.body) throw new Error('DBPR returned an empty download.');
   if (Number(response.headers.get('content-length')) > MAX_BYTES) throw new Error('Registry download exceeds the size limit.');

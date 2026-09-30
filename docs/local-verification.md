@@ -4,7 +4,7 @@ Run `pnpm test:browser` from the project root.
 
 The suite copies the app into an ignored `.verification-tmp/run-*/workspace` directory, links the installed dependencies, starts its own server on an available port, and creates a fresh SQLite database. It uses real Route Handlers and server actions, not mocked API responses. The normal running app and its database are untouched.
 
-If Chrome is not installed, run `pnpm --filter @date-planner/web exec puppeteer browsers install chrome` first.
+If Chrome is not installed, run `pnpm --filter @datebloom/web exec puppeteer browsers install chrome` first.
 
 ## Verified checks
 

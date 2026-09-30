@@ -4,7 +4,7 @@ Last updated: September 29, 2026.
 
 ## Purpose and user intent
 
-Expand DatePlanner's verified Tampa restaurants and nearby activities so customers can generate more useful dates across cuisines, budgets, neighborhoods, settings, and schedules. The user agreed that broader coverage is the next implementation priority and asked for this document so a new chat can resume with the context intact.
+Expand DateBloom's verified Tampa restaurants and nearby activities so customers can generate more useful dates across cuisines, budgets, neighborhoods, settings, and schedules. The user agreed that broader coverage is the next implementation priority and asked for this document so a new chat can resume with the context intact.
 
 This document records the recommended batching approach and execution steps. Creating it did not add any venues. Start future implementation by reading this file, the relevant project documents, and the current catalog; update the progress section as work proceeds.
 
@@ -24,7 +24,7 @@ Two datasets already provide discovery candidates:
 
 | Dataset | Location | Snapshot and useful details |
 | --- | --- | --- |
-| DatePlanner discovery registry | `data/restaurant-registry.json` | September 28, 2026 import; 7,545 unique DBPR licenses across Hillsborough and Pinellas. Discovery records are not loaded into the generator. |
+| DateBloom discovery registry | `data/restaurant-registry.json` | September 28, 2026 import; 7,545 unique DBPR licenses across Hillsborough and Pinellas. Discovery records are not loaded into the generator. |
 | Older Bay Bites project | `D:\Michael\Programming\Projects\tampa` | September 17, 2026 snapshot; 7,551 listings, including 2,949 with Tampa city addresses. Useful editorial tags, websites, and approximate coordinates. |
 
 Counts are dated snapshots, not counts of restaurants currently open. The older directory has 55 website links and 51 price categories; its records have no opening-hours fields. Most cuisines are unknown or inferred from business names. Editorial tags and price categories need fresh verification before use in the planner.
@@ -40,7 +40,7 @@ The older project need not run to inspect its files:
 - `catalog/location-corrections.json`: separately sourced corrections.
 - `parking.js` / `catalog/parking-cache.json`: OpenStreetMap parking information; not route times or live availability.
 
-Both projects use the same DBPR source. Prefer DatePlanner's newer registry for license discovery. Use Bay Bites to find promising candidates, websites, and locations; keep DatePlanner independent of the older project's runtime.
+Both projects use the same DBPR source. Prefer DateBloom's newer registry for license discovery. Use Bay Bites to find promising candidates, websites, and locations; keep DateBloom independent of the older project's runtime.
 
 ## Sources
 
@@ -90,7 +90,7 @@ Prioritize missing cuisines, a mix of lower/moderate/higher costs for two, indoo
 
 Read repository instructions and the files above. Check existing venues and candidate progress to avoid duplicate work. Inspect the discovery snapshot's source date. Refresh when needed; a refresh downloads licenses, not verified planning facts.
 
-From the DatePlanner root:
+From the DateBloom root:
 
 ```powershell
 pnpm restaurants:refresh

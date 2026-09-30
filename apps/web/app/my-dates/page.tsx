@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { dateRequestStatusSchema, generatedPlanSchema, type GeneratedPlan } from "@date-planner/contracts";
+import { dateRequestStatusSchema, generatedPlanSchema, type GeneratedPlan } from "@datebloom/contracts";
 import { getCurrentUser, getGuestOwnerHash, listDateRequests, listGuestDateRequests } from "@/lib/local-db";
 import { GeneratedPlanView } from "@/app/components/generated-plan";
 import { signOut } from "@/app/login/actions";

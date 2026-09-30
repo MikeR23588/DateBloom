@@ -16,7 +16,7 @@ const csv = (rows, headers = REQUIRED_HEADERS) => [headers, ...rows.map(record =
 const observedAt = '2026-09-28T12:00:00.000Z';
 const temporaryDirectories = [];
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'date-planner-registry-'));
+  const root = await mkdtemp(join(tmpdir(), 'datebloom-registry-'));
   temporaryDirectories.push(root);
   return { root, input: join(root, 'registry.csv'), output: join(root, 'snapshot.json') };
 }

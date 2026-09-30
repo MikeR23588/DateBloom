@@ -1,4 +1,4 @@
-﻿import type { DateRequestCreate } from "@date-planner/contracts";
+import type { DateRequestCreate } from "@datebloom/contracts";
 
 export type VenueCategory = "meal" | "activity";
 export type DataConfidence = "verified" | "estimate" | "unknown";

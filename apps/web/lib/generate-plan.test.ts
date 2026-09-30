@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dateRequestCreateSchema, generatedPlanSchema, type DateRequestCreate } from "@date-planner/contracts";
+import { dateRequestCreateSchema, generatedPlanSchema, type DateRequestCreate } from "@datebloom/contracts";
 import { generateDatePlan, NoMatchingPlanError } from "./generate-plan";
 import { restaurantCoverageSummary, venues } from "./venue-catalog";
 

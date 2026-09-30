@@ -1,4 +1,4 @@
-import { generatedPlanSchema, type DateRequestCreate, type GeneratedPlan } from "@date-planner/contracts";
+import { generatedPlanSchema, type DateRequestCreate, type GeneratedPlan } from "@datebloom/contracts";
 import { catalogCheckedOn, catalogExpiresOn, restaurantCoverageSummary, venues, events, walkingBuffers, walkingBufferBasis, onSiteWalkingPairs, type CatalogVenue, type CatalogEvent } from "./venue-catalog";
 import { venueHoursOnDate } from "./venue-hours";
 

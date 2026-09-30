@@ -1,7 +1,7 @@
 ﻿import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@date-planner/contracts"],
+  transpilePackages: ["@datebloom/contracts"],
 };
 
 export default nextConfig;

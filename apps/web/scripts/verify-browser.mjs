@@ -57,7 +57,7 @@ async function freePort() {
 async function startServer(port) {
   server = spawn(process.execPath, [path.join(webRoot, "node_modules/next/dist/bin/next"), "dev", "--webpack", "--hostname", "127.0.0.1", "--port", String(port)], {
     cwd: path.join(fixtureRoot, "apps/web"),
-    env: { ...process.env, DATE_PLANNER_DB_PATH: databasePath, NEXT_TELEMETRY_DISABLED: "1" },
+    env: { ...process.env, DATEBLOOM_DB_PATH: databasePath, NEXT_TELEMETRY_DISABLED: "1" },
     stdio: ["ignore", "pipe", "pipe"], windowsHide: true,
   });
   const capture = (chunk) => { if (serverOutput.length < 32000) serverOutput += chunk.toString(); };
@@ -162,7 +162,7 @@ async function signIn(page, baseUrl, email, password) {
 async function signOut(page) {
   await click(page, ".nav-signout");
   await page.waitForFunction(() => location.pathname === "/login");
-  assert.equal((await page.cookies()).some((cookie) => cookie.name === "date_planner_session"), false);
+  assert.equal((await page.cookies()).some((cookie) => cookie.name === "datebloom_session"), false);
 }
 
 async function restoreCookies(page, cookies) {
@@ -172,7 +172,7 @@ async function restoreCookies(page, cookies) {
 }
 
 async function run() {
-  assert.ok(existsSync(puppeteer.executablePath()), "Install Chrome with: pnpm --filter @date-planner/web exec puppeteer browsers install chrome");
+  assert.ok(existsSync(puppeteer.executablePath()), "Install Chrome with: pnpm --filter @datebloom/web exec puppeteer browsers install chrome");
   prepareWorkspace();
   const port = await freePort();
   const baseUrl = `http://127.0.0.1:${port}`;
@@ -268,7 +268,7 @@ async function run() {
     assert.equal(saved.request.requestedLocalDate, preferred);
     assert.equal(saved.request.maximumWalkingMinutes, 12);
     assert.equal(saved.request.returnToParkedCar, true);
-    const cookie = (await pageA.cookies()).find((cookie) => cookie.name === "date_planner_guest");
+    const cookie = (await pageA.cookies()).find((cookie) => cookie.name === "datebloom_guest");
     assert.ok(cookie.httpOnly);
     assert.equal(cookie.sameSite, "Lax");
     assert.ok(cookie.expires > Date.now() / 1000);
@@ -332,7 +332,7 @@ async function run() {
     assert.deepEqual((await api(pageB)).body.data.map((item) => item.id), [other.body.data.id]);
     assert.equal(rows("SELECT * FROM guest_date_requests").length, 1);
     cookiesA = await pageA.cookies();
-    const cookie = cookiesA.find((cookie) => cookie.name === "date_planner_session");
+    const cookie = cookiesA.find((cookie) => cookie.name === "datebloom_session");
     assert.ok(cookie.httpOnly);
     assert.equal(cookie.sameSite, "Lax");
     assert.ok(cookie.expires > Date.now() / 1000);
@@ -358,7 +358,7 @@ async function run() {
   });
 
   await check("Sign-out revokes the session and incorrect credentials do not sign in", async () => {
-    const token = cookiesA.find((cookie) => cookie.name === "date_planner_session").value;
+    const token = cookiesA.find((cookie) => cookie.name === "datebloom_session").value;
     await signOut(pageA);
     assert.equal(rows("SELECT * FROM sessions WHERE token_hash=?", createHash("sha256").update(token).digest("hex")).length, 0);
     assert.deepEqual((await api(pageA)).body.data, []);

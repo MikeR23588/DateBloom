@@ -5,7 +5,7 @@ import { useRef, useState, type FormEvent } from "react";
 import {
   activityOptions, apiErrorSchema, cuisineOptions, dateRequestCreateSchema,
   dateRequestResponseSchema, type GeneratedPlan,
-} from "@date-planner/contracts";
+} from "@datebloom/contracts";
 import { GeneratedPlanView } from "@/app/components/generated-plan";
 import { formatLocalTime } from "@/lib/dates/display-time";
 

@@ -1,4 +1,4 @@
-DATE PLANNER - LOCAL STARTUP
+DATEBLOOM - LOCAL STARTUP
 
 Prerequisites
 -------------
@@ -20,7 +20,7 @@ Start the project (PowerShell)
 
    Copy-Item .env.example apps\web\.env.local
 
-   The default SQLite database is data\date-planner.sqlite.
+   The default SQLite database is data\datebloom.sqlite.
 
 5. Start the development server:
 
@@ -54,11 +54,11 @@ Run the live browser acceptance checks:
 
 Build the production app:
 
-   pnpm --filter @date-planner/web build
+   pnpm --filter @datebloom/web build
 
 Start the production build after building:
 
-   pnpm --filter @date-planner/web start
+   pnpm --filter @datebloom/web start
 
 Optional restaurant discovery commands
 ---------------------------------------
@@ -77,4 +77,4 @@ Notes
 - The app currently runs locally on one machine using SQLite.
 - If Chrome is missing for browser checks, install it with:
 
-   pnpm --filter @date-planner/web exec puppeteer browsers install chrome
+   pnpm --filter @datebloom/web exec puppeteer browsers install chrome

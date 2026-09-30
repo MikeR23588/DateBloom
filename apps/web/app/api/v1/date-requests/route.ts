@@ -8,7 +8,7 @@ import {
   dateRequestSummarySchema,
   idempotencyKeySchema,
   generatedPlanSchema,
-} from "@date-planner/contracts";
+} from "@datebloom/contracts";
 import {
   activeCity, createDateRequest, createGuestDateRequest, ensureGuestSession,
   getCurrentUser, getExistingDateRequest, getExistingGuestDateRequest,
@@ -49,7 +49,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!isSameOrigin(request)) return errorResponse(403, "ORIGIN_REJECTED", "Submit this request from the Date Planner website.");
+  if (!isSameOrigin(request)) return errorResponse(403, "ORIGIN_REJECTED", "Submit this request from the DateBloom website.");
   let payload: unknown;
   try { payload = await request.json(); }
   catch { return errorResponse(400, "INVALID_JSON", "Request body must be valid JSON."); }

@@ -1,5 +1,5 @@
 {
-  "name": "@date-planner/planning",
+  "name": "@datebloom/planning",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -7,6 +7,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@date-planner/contracts": "workspace:*"
+    "@datebloom/contracts": "workspace:*"
   }
 }

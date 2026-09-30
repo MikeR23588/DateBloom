@@ -10,7 +10,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@date-planner/contracts':
+      '@datebloom/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
       csv-parse:
@@ -59,7 +59,7 @@ importers:
 
   packages/planning:
     dependencies:
-      '@date-planner/contracts':
+      '@datebloom/contracts':
         specifier: workspace:*
         version: link:../contracts
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { generatedPlanSchema, type GeneratedPlan } from "@date-planner/contracts";
+import { generatedPlanSchema, type GeneratedPlan } from "@datebloom/contracts";
 import { formatLocalTime } from "@/lib/dates/display-time";
 
 const money = (cents: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(cents / 100);

@@ -1,4 +1,4 @@
-import type { DateRequestCreate } from "@date-planner/contracts";
+import type { DateRequestCreate } from "@datebloom/contracts";
 import { batchOneCompletionVenues } from "./venue-batch-one";
 
 export type Hours = readonly (readonly [number, number] | null)[];

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./style.css";
 
 export const metadata: Metadata = {
-  title: "Date Planner | Tampa",
+  title: "DateBloom | Tampa",
   description: "Tell us your budget and when you are free. We arrange the date. You show up.",
 };
 

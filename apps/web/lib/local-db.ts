@@ -5,19 +5,19 @@ import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { cookies } from "next/headers";
 
-const SESSION_COOKIE = "date_planner_session";
+const SESSION_COOKIE = "datebloom_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 14;
 type UserRow = { id: string; email: string; name: string };
 type RequestRow = { id: string; requested_local_date: string; status: string; created_at: string; details_json: string };
 type ExistingRequest = { details_json: string; id: string; requested_local_date: string; status: string; created_at: string; request_payload_hash: string };
 
-type DatabaseGlobal = typeof globalThis & { __datePlannerDb?: DatabaseSync; __datePlannerDbPath?: string };
+type DatabaseGlobal = typeof globalThis & { __dateBloomDb?: DatabaseSync; __dateBloomDbPath?: string };
 function getDb() {
   const shared = globalThis as DatabaseGlobal;
   let projectRoot = path.resolve(process.cwd());
   while (!existsSync(path.join(projectRoot, "pnpm-workspace.yaml")) && path.dirname(projectRoot) !== projectRoot) projectRoot = path.dirname(projectRoot);
-  const file = path.resolve(projectRoot, process.env.DATE_PLANNER_DB_PATH ?? "data/date-planner.sqlite");
-  if (shared.__datePlannerDb && shared.__datePlannerDbPath === file) return shared.__datePlannerDb;
+  const file = path.resolve(projectRoot, process.env.DATEBLOOM_DB_PATH ?? "data/datebloom.sqlite");
+  if (shared.__dateBloomDb && shared.__dateBloomDbPath === file) return shared.__dateBloomDb;
   mkdirSync(path.dirname(file), { recursive: true });
   const db = new DatabaseSync(file);
   db.exec("PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;");
@@ -65,8 +65,8 @@ function getDb() {
       VALUES ('tampa','Tampa','America/New_York', '["Downtown / Water Street","Hyde Park","Seminole Heights"]',0,1);
     UPDATE cities SET minimum_notice_hours=0 WHERE slug='tampa';
   `);
-  shared.__datePlannerDb = db;
-  shared.__datePlannerDbPath = file;
+  shared.__dateBloomDb = db;
+  shared.__dateBloomDbPath = file;
   return db;
 }
 
@@ -97,7 +97,7 @@ export async function signInAccount(emailValue: string, password: string): Promi
   const attempts = db.prepare("SELECT window_started,failures FROM auth_attempts WHERE email=?")
     .get(email) as { window_started: number; failures: number } | undefined;
   const limited = Boolean(attempts && attempts.window_started > now - 900 && attempts.failures >= 10);
-  const salt = row?.password_salt ?? "date-planner-unknown-account-salt";
+  const salt = row?.password_salt ?? "datebloom-unknown-account-salt";
   const candidate = scryptSync(password, salt, 64);
   const expected = row ? Buffer.from(row.password_hash, "hex") : Buffer.alloc(64);
   const passwordMatches = candidate.length === expected.length && timingSafeEqual(candidate, expected);
@@ -175,7 +175,7 @@ export function createDateRequest(input: {
   }
   return { row: { id: input.id, requested_local_date: input.requestedLocalDate, status: "generated", created_at: createdAt, request_payload_hash: input.requestPayloadHash }, duplicate: false, conflict: false };
 }
-const GUEST_COOKIE = "date_planner_guest";
+const GUEST_COOKIE = "datebloom_guest";
 const GUEST_TTL_SECONDS = 60 * 60 * 24 * 180;
 
 export async function getGuestOwnerHash(): Promise<string | null> {

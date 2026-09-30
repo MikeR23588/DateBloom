@@ -55,7 +55,7 @@ The discovery snapshot preserves license/status details, flags conflicts and mob
 ## Run locally
 
 1. Run `pnpm install`.
-2. Optionally copy `.env.example` to `apps/web/.env.local` to choose a database path. The default is `data/date-planner.sqlite` in the project root.
+2. Optionally copy `.env.example` to `apps/web/.env.local` to choose a database path. The default is `data/datebloom.sqlite` in the project root.
 3. Run `pnpm dev`.
 4. Open http://localhost:3000 and choose **Plan my date**.
 
@@ -70,7 +70,7 @@ Account creation does not send email. Passwords use scrypt hashes, and account s
 ## Commands
 
 - `pnpm dev` — start the website
-- `pnpm --filter @date-planner/web build` — production build
+- `pnpm --filter @datebloom/web build` — production build
 - `pnpm lint`, `pnpm typecheck`, `pnpm test` — quality checks
 
 SQLite is currently intended for development on one machine and one app instance. Production hosting/storage is a later milestone.
@@ -79,4 +79,4 @@ SQLite is currently intended for development on one machine and one app instance
 
 Run `pnpm test:browser` to verify the real generation, saving, retries, and account journeys in an isolated app copy with a fresh test database. It does not change your normal database or stop your dev server. The command prints the location of its verification report and desktop/mobile screenshots.
 
-If the browser is missing, install it with `pnpm --filter @date-planner/web exec puppeteer browsers install chrome`. See `docs/local-verification.md` for the 23 checks (including the seasonally conditional Plant Museum journey) and remaining verification limits.
+If the browser is missing, install it with `pnpm --filter @datebloom/web exec puppeteer browsers install chrome`. See `docs/local-verification.md` for the 23 checks (including the seasonally conditional Plant Museum journey) and remaining verification limits.

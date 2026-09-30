@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { dateRequestCreateSchema, generatedPlanSchema } from "@date-planner/contracts";
+import { dateRequestCreateSchema, generatedPlanSchema } from "@datebloom/contracts";
 import { batchOneCompletionVenues } from "./venue-batch-one";
 import * as catalog from "./venue-catalog";
 import { venueHoursOnDate } from "./venue-hours";
