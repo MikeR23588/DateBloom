@@ -1,6 +1,7 @@
 import type { DateRequestCreate } from "@datebloom/contracts";
 import { batchOneCompletionVenues } from "./venue-batch-one";
 import { batchTwoVenues } from "./venue-batch-two";
+import { enrichedPlannerVenues } from "./registry-enrichment";
 import type { PriceBand } from "./price-bands";
 
 export type Hours = readonly (readonly [number, number] | null)[];
@@ -204,7 +205,9 @@ export const expansionVenues: readonly CatalogVenue[] = [
     minimumMinutes: 30, maximumMinutes: 120,
   },
 ];
-export const venues: readonly CatalogVenue[] = [...seedVenues, ...expansionVenues, ...batchOneCompletionVenues, ...batchTwoVenues];
+const handReviewedVenues = [...seedVenues, ...expansionVenues, ...batchOneCompletionVenues, ...batchTwoVenues];
+const handReviewedLicenses = new Set(handReviewedVenues.map(venue => venue.registryLicense).filter(Boolean));
+export const venues: readonly CatalogVenue[] = [...handReviewedVenues, ...enrichedPlannerVenues.filter(venue => !handReviewedLicenses.has(venue.registryLicense))];
 export function restaurantCoverageSummary() {
   const restaurants = venues.filter(venue => venue.cuisines);
   return [...new Set(restaurants.map(venue => venue.neighborhood))].map(neighborhood => {

@@ -11,7 +11,8 @@
         "test": "vitest run",
         "test:browser": "node scripts/verify-browser.mjs",
         "restaurants:refresh": "node scripts/refresh-restaurants.mjs",
-        "restaurants:review": "node scripts/review-restaurants.mjs"
+        "restaurants:review": "node scripts/review-restaurants.mjs",
+        "restaurants:enrich": "node scripts/import-restaurant-enrichment.mjs"
     },
     "dependencies": {
         "@datebloom/contracts": "workspace:*",

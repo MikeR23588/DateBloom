@@ -10,6 +10,7 @@
                     "test:browser":  "pnpm --filter @datebloom/web test:browser",
                     "restaurants:refresh": "pnpm --filter @datebloom/web restaurants:refresh",
                     "restaurants:review": "pnpm --filter @datebloom/web restaurants:review",
+                    "restaurants:enrich": "pnpm --filter @datebloom/web restaurants:enrich",
                     "hooks": "git config core.hooksPath .githooks"
                 },
     "engines":  {

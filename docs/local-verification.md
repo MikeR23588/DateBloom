@@ -53,3 +53,5 @@ Each new journey verifies the full requested duration, named venue IDs, source d
 September 30 Batch 2 first-slice run: 24 live checks passed, including an hour-aligned Hyde Park / The Candle Pour pairing and mobile saved-plan/retry journey. Report and screenshots: `.verification-tmp/run-yCyzMX/artifacts`. The earlier 23-check result remains historical.
 
 Installed dependencies are reused, so this does not verify a fresh dependency installation. Venue records are not refreshed by the test. Live routing, reservation availability, keyboard/accessibility auditing, production HTTPS/session configuration, and deployment are separate pending milestones.
+
+September 30 directory/enrichment run: 112 automated tests, 26 live browser checks, lint, typecheck and production build passed. The added live check covers DBPR directory search, unknown facts, empty results and mobile overflow. Report/screenshots: `.verification-tmp/run-nU1TCe/artifacts`. The production build reported the pre-existing dynamic-filesystem tracing warning in `local-db.ts`.

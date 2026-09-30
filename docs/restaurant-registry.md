@@ -19,7 +19,7 @@ Offline imports accept an existing CSV without modifying it:
 pnpm restaurants:refresh --input "D:\Michael\Programming\Projects\tampa\catalog\hrfood3.csv"
 ```
 
-That path is an example from the neighboring project, not a runtime dependency. Offline imports explicitly have unknown source freshness. The generated snapshot is `data/restaurant-registry.json`, ignored by version control. It is not served publicly, does not alter the SQLite database, and is not loaded by the itinerary generator.
+That path is an example from the neighboring project, not a runtime dependency. Offline imports explicitly have unknown source freshness. The generated snapshot is `data/restaurant-registry.json`, ignored by version control. The app reads it for the public, searchable `/restaurants` discovery directory; it does not alter the SQLite database or directly supply the itinerary generator. Deployments need their own refreshed snapshot, or the directory shows a setup message.
 
 ## Source and scope
 
@@ -42,14 +42,23 @@ Updates use an exclusive lock and a temporary file followed by atomic replacemen
 
 The snapshot records a content SHA-256, import timestamp, acquisition method and the server's Last-Modified header when available. An import timestamp is not a verification timestamp. DBPR says extracts are normally refreshed weekly; this command runs on demand, not on an installed schedule. Official menu/hour refresh and closure verification remain separate, pending work.
 
-## Promote a restaurant into the planner
+## Bulk enrichment and planner promotion
 
-1. Confirm the exact branch and identity using the license, facility address and official restaurant site. Resolve conflicting or concerning statuses; do not equate a license record with today's operating status.
-2. Verify cuisine, the supported starting neighborhood, actual seating/setting, published hours and closure exceptions from official sources.
-3. Capture a reproducible menu example for two with prices and source links. Keep the planner's tax/tip/cushion assumptions explicit.
-4. Add the verified record to `apps/web/lib/venue-catalog.ts`, preserving an honest source review date. Do not import editorial estimates from the neighboring directory as verified facts.
-5. Add walking buffers only when supported and disclose their approximate nature. Do not invent routing, parking, dietary, accessibility or booking availability facts.
-6. Test a matching request, a closed-time rejection and budget boundaries. Saved plans must retain their old snapshots after catalog changes.
+`data/restaurant-enrichment.json` is versioned and separate from the DBPR snapshot. It starts empty. Import a JSON array of reviewed records in one operation:
+
+```powershell
+pnpm restaurants:enrich --input .\reviewed-restaurants.json
+```
+
+The command matches by DBPR license, merges existing records, validates evidence fields, and atomically updates the enrichment file. Unknown licenses and flagged/archived/conflicting registry rows cannot be promoted. The reviewed source must be the exact restaurant branch, not a generic listing. Discovery-only enrichment can omit unverified fields and set `plannerEligible: false`.
+
+To make a record available to the planner, set `plannerEligible: true` and provide `name`, `address`, `neighborhood`, `cuisines`, `priceBand`, `setting`, seven `hours` entries, `sourceUrl`, `reviewedOn`, and `expiresOn`. Price bands are `budget`, `moderate`, `upscale`, or `splurge`; they are broad estimates for two, not exact bills. `hours` is a Sunday-through-Saturday array of `[openingMinute, closingMinute]` in local time (or `null` for closed). `setting` is `indoors` or `outdoors`. Optional fields are `menuUrl`, `bookingUrl`, and `notes`. Example shape (illustrative, not a real reviewed restaurant):
+
+```json
+[{"license":"EXAMPLE123","plannerEligible":true,"name":"Example Restaurant","address":"123 Example St, Tampa, FL","neighborhood":"Downtown / Water Street","cuisines":["American"],"priceBand":"moderate","setting":"indoors","hours":[null,[660,1320],[660,1320],[660,1320],[660,1380],[660,1380],[660,1320]],"sourceUrl":"https://example.com/official-branch","reviewedOn":"2026-09-30","expiresOn":"2026-10-30"}]
+```
+
+Confirm the identity, current operation, official hours (including exceptions), setting and a defensible broad price band before import. Add checked walking buffers separately when supported. Never invent routing, dietary/accessibility suitability, or booking availability. Test a matching request, a closed-time rejection, and budget boundaries; saved plans retain their old snapshots. Recheck enriched records after each DBPR refresh because later license status changes do not automatically revoke a previously reviewed record. The importer is batch-capable, but source verification still requires trustworthy data; no Yelp/Google API or paid per-lookup dependency is used.
 
 ## Verified on September 28, 2026
 

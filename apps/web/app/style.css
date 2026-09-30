@@ -249,3 +249,27 @@ em { font-style:normal; }
 }
 @media (max-width:380px) { .hero h1 { font-size:3rem; } .hero { padding-right:18px; padding-left:18px; } .hero-art { padding-right:14px; padding-left:14px; } .date-card-title { font-size:1.75rem; } .date-stop strong { font-size:.83rem; } .site-nav { justify-content:flex-start; } .section-heading h2,.closing-cta h2 { font-size:2.3rem; } }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+.restaurant-directory { min-height:100vh; }
+.directory-heading { max-width:780px; padding:38px 0 25px; }
+.directory-heading h1 { margin:10px 0; font-size:clamp(2.5rem,5vw,4.5rem); }
+.directory-heading>p:last-child { line-height:1.65; color:var(--ink-soft); }
+.directory-search { display:flex; align-items:end; flex-wrap:wrap; gap:16px; padding:22px; border:2px solid var(--ink); border-radius:24px; background:var(--white); }
+.directory-search label { display:grid; gap:7px; min-width:190px; flex:1 1 240px; font-weight:800; }
+.directory-search input,.directory-search select { width:100%; min-height:50px; padding:10px 14px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink); }
+.directory-count { margin:24px 0; color:var(--ink-soft); font-size:.9rem; }
+.directory-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr)); gap:18px; }
+.directory-card { min-width:0; padding:22px; border:2px solid var(--ink); border-radius:20px; background:var(--white); box-shadow:4px 5px 0 var(--ink); }
+.directory-card-top,.directory-links,.directory-pagination { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+.directory-card-top small { color:var(--ink-soft); overflow-wrap:anywhere; }
+.directory-badge { padding:5px 10px; border-radius:999px; background:var(--peach); font-size:.75rem; font-weight:800; }
+.directory-badge-ready { background:var(--sage); }
+.directory-card h2 { margin:20px 0 6px; font-size:1.55rem; overflow-wrap:anywhere; }
+.directory-card>p { line-height:1.5; overflow-wrap:anywhere; }
+.directory-card dl { display:grid; grid-template-columns:110px minmax(0,1fr); gap:8px; margin:22px 0; font-size:.9rem; }
+.directory-card dt { font-weight:800; }
+.directory-card dd { margin:0; overflow-wrap:anywhere; }
+.directory-warning { color:var(--coral-dark); font-size:.85rem; }
+.directory-links { justify-content:flex-start; font-size:.85rem; font-weight:800; }
+.directory-empty { padding:30px; border-radius:20px; background:var(--white); line-height:1.6; }
+.directory-pagination { justify-content:center; margin:34px 0; font-weight:800; }
+@media (max-width:680px) { .directory-heading { padding-top:20px; } .directory-search { padding:18px; } .directory-search .button { width:100%; } }

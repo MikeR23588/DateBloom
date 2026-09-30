@@ -46,7 +46,7 @@ Saved itineraries retain their venue and source snapshots; retries return the sa
 
 Run `pnpm restaurants:refresh` to import the Florida DBPR food-service registry for Hillsborough and Pinellas. Run `pnpm restaurants:review --city TAMPA --search "NUEVA CANTINA"` to inspect candidates. An existing CSV can be imported with `pnpm restaurants:refresh --input "C:\path\hrfood3.csv"`.
 
-The discovery snapshot preserves license/status details, flags conflicts and mobile locations, and archives missing records. It does not make restaurants eligible for itineraries: official cuisine, hours, prices and seating still need verification. Verified restaurant/menu refresh remains pending. See [restaurant discovery and verification](docs/restaurant-registry.md) for scope, safeguards and the promotion checklist.
+The snapshot powers the searchable `/restaurants` directory, preserving license/status details, flagging conflicts and mobile locations, and archiving missing records. The snapshot is local and ignored by Git, so each deployment must refresh its own copy. Listings are discovery only: official cuisine, hours, setting and a broad price band still need verification. Use `pnpm restaurants:enrich --input path/to/reviewed-records.json` to merge a batch of reviewed records into the versioned enrichment file; only complete, explicitly approved records enter the planner. No Google Places, Yelp or metered lookup API is used. See [restaurant discovery and verification](docs/restaurant-registry.md) for fields, safeguards and limits.
 
 ## Prerequisites
 

@@ -4,7 +4,7 @@ This roadmap is the recommended implementation order after the local CI and repo
 
 The current launch market remains Tampa. New venue facts must be verified from exact official sources, retain review dates and expiry dates, and remain separate from discovery-only DBPR records. The planner must continue to return named, feasible itineraries or an explicit no-match result; it must not invent availability, suitability, prices, hours, routes, or booking confirmations.
 
-Pricing now uses approximate bands for new plans. Restaurant records may use a sourced band instead of an exact menu subtotal; legacy subtotals are retained for compatibility. Budget handling rejects only when the low end of the approximate range exceeds the requested budget and warns if its high end does. No third-party price API is required. The DBPR list supplies identity/discovery, not verified cuisine, hours or a price band; a separate scalable enrichment process is still needed before all listed restaurants can be scheduled.
+Pricing now uses approximate bands for new plans. Restaurant records may use a sourced band instead of an exact menu subtotal; legacy subtotals are retained for compatibility. Budget handling rejects only when the low end of the approximate range exceeds the requested budget and warns if its high end does. No third-party price API is required. The DBPR list supplies identity/discovery, not verified cuisine, hours or a price band. A searchable directory and batch enrichment import now exist, but the source facts must still be collected and reviewed before any new restaurant becomes planner eligible.
 
 ## 1. Build Batch 2: Hyde Park / SoHo
 
