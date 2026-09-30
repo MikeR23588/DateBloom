@@ -3,9 +3,9 @@ import { validateEnrichment } from "./restaurant-enrichment.mjs";
 import type { CatalogVenue } from "./venue-catalog";
 
 type EnrichmentRecord = {
-  license: string; plannerEligible?: boolean; name?: string; address?: string; neighborhood?: string;
-  cuisines?: string[]; priceBand?: CatalogVenue["priceBand"]; setting?: CatalogVenue["setting"];
-  hours?: (readonly [number, number] | null)[]; sourceUrl?: string; reviewedOn?: string; expiresOn?: string;
+  license: string; plannerEligible?: boolean; name?: string; address?: string; registryStreet?: string; neighborhood?: string;
+  cuisines?: string[]; moods?: CatalogVenue["moods"]; priceBand?: CatalogVenue["priceBand"]; setting?: CatalogVenue["setting"];
+  hours?: (readonly [number, number] | null)[]; sourceUrl?: string; priceSourceUrl?: string; reviewedOn?: string; expiresOn?: string;
   menuUrl?: string; bookingUrl?: string; notes?: string;
 };
 
@@ -21,8 +21,8 @@ export const enrichedPlannerVenues: readonly CatalogVenue[] = restaurantEnrichme
     hours: record.hours!, sourceUrl: record.sourceUrl!, sourceCheckedOn: record.reviewedOn!, sourceExpiresOn: record.expiresOn!,
     ...(record.menuUrl ? { menuUrl: record.menuUrl } : {}),
     ...(record.bookingUrl ? { bookingUrl: record.bookingUrl } : {}),
-    moods: ["relaxed", "romantic", "playful", "adventurous", "dressy"],
+    moods: record.moods!,
     costDescription: "Broad reviewed price band for two; check the current menu before ordering.",
-    planningNotes: ["Imported from reviewed restaurant enrichment, not from the DBPR license alone.", ...(record.notes ? [record.notes] : [])],
+    planningNotes: ["Imported from reviewed restaurant enrichment, not from the DBPR license alone.", `Price-band evidence: ${record.priceSourceUrl}`, ...(record.notes ? [record.notes] : [])],
     minimumMinutes: 60, maximumMinutes: 120,
   }));

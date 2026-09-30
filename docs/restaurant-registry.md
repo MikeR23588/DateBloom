@@ -44,21 +44,23 @@ The snapshot records a content SHA-256, import timestamp, acquisition method and
 
 ## Bulk enrichment and planner promotion
 
-`data/restaurant-enrichment.json` is versioned and separate from the DBPR snapshot. It starts empty. Import a JSON array of reviewed records in one operation:
+`data/restaurant-enrichment.json` is versioned and separate from the DBPR snapshot. It currently contains four reviewed Hyde Park records. Import a JSON array of further reviewed records in one operation:
 
 ```powershell
 pnpm restaurants:enrich --input .\reviewed-restaurants.json
 ```
 
-The command matches by DBPR license, merges existing records, validates evidence fields, and atomically updates the enrichment file. Unknown licenses and flagged/archived/conflicting registry rows cannot be promoted. The reviewed source must be the exact restaurant branch, not a generic listing. Discovery-only enrichment can omit unverified fields and set `plannerEligible: false`.
+The command resolves `--input` relative to the project root, matches by DBPR license, merges existing records, validates evidence fields, and atomically updates the enrichment file. Unknown licenses and flagged/archived/conflicting registry rows cannot be promoted. Clearly multi-concept comma-list names are also rejected pending identity review. Planner-eligible records must carry the exact DBPR `registryStreet` for branch matching. The reviewed source must be the exact restaurant branch, not a generic listing. Discovery-only enrichment can omit unverified fields and set `plannerEligible: false`.
 
-To make a record available to the planner, set `plannerEligible: true` and provide `name`, `address`, `neighborhood`, `cuisines`, `priceBand`, `setting`, seven `hours` entries, `sourceUrl`, `reviewedOn`, and `expiresOn`. Price bands are `budget`, `moderate`, `upscale`, or `splurge`; they are broad estimates for two, not exact bills. `hours` is a Sunday-through-Saturday array of `[openingMinute, closingMinute]` in local time (or `null` for closed). `setting` is `indoors` or `outdoors`. Optional fields are `menuUrl`, `bookingUrl`, and `notes`. Example shape (illustrative, not a real reviewed restaurant):
+To make a record available to the planner, set `plannerEligible: true` and provide `name`, `address`, `registryStreet`, `neighborhood`, `cuisines`, `moods`, `priceBand`, `setting`, seven `hours` entries, official `sourceUrl`, separate `priceSourceUrl`, `reviewedOn`, and `expiresOn`. Price bands are `budget`, `moderate`, `upscale`, or `splurge`; they are broad estimates for two, not exact bills. `hours` is a Sunday-through-Saturday array of `[openingMinute, closingMinute]` in local time (or `null` for closed). `setting` is `indoors` or `outdoors`. Optional fields are `menuUrl`, `bookingUrl`, and `notes`. Mood tags must describe the setting rather than defaulting every venue to romantic or dressy. Example shape (illustrative, not a real reviewed restaurant):
 
 ```json
-[{"license":"EXAMPLE123","plannerEligible":true,"name":"Example Restaurant","address":"123 Example St, Tampa, FL","neighborhood":"Downtown / Water Street","cuisines":["American"],"priceBand":"moderate","setting":"indoors","hours":[null,[660,1320],[660,1320],[660,1320],[660,1380],[660,1380],[660,1320]],"sourceUrl":"https://example.com/official-branch","reviewedOn":"2026-09-30","expiresOn":"2026-10-30"}]
+[{"license":"EXAMPLE123","plannerEligible":true,"registryStreet":"123 EXAMPLE ST","name":"Example Restaurant","address":"123 Example St, Tampa, FL","neighborhood":"Downtown / Water Street","cuisines":["American"],"moods":["relaxed"],"priceBand":"moderate","setting":"indoors","hours":[null,[660,1320],[660,1320],[660,1320],[660,1380],[660,1380],[660,1320]],"sourceUrl":"https://example.com/official-branch","priceSourceUrl":"https://example.com/menu","reviewedOn":"2026-09-30","expiresOn":"2026-10-30"}]
 ```
 
 Confirm the identity, current operation, official hours (including exceptions), setting and a defensible broad price band before import. Add checked walking buffers separately when supported. Never invent routing, dietary/accessibility suitability, or booking availability. Test a matching request, a closed-time rejection, and budget boundaries; saved plans retain their old snapshots. Recheck enriched records after each DBPR refresh because later license status changes do not automatically revoke a previously reviewed record. The importer is batch-capable, but source verification still requires trustworthy data; no Yelp/Google API or paid per-lookup dependency is used.
+
+The September 30 Hyde Park batch promoted four exact-branch records; see [Batch 2 source reviews](batch-two-source-reviews.md). The current planner catalog has 24 restaurants, not 7,545. DBPR refresh and official menu/hour rechecks are still on demand, and shared-license concepts need a separate identity-resolution workflow before import.
 
 ## Verified on September 28, 2026
 

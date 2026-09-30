@@ -1,4 +1,207 @@
 {
   "version": 1,
-  "records": []
+  "records": [
+    {
+      "license": "SEA3912568",
+      "plannerEligible": true,
+      "registryStreet": "1610 WEST SWANN AVENUE",
+      "name": "Timpano Hyde Park",
+      "address": "1610 W Swann Ave, Tampa, FL 33606",
+      "neighborhood": "Hyde Park",
+      "cuisines": [
+        "Italian"
+      ],
+      "moods": ["romantic", "dressy", "relaxed"],
+      "priceBand": "upscale",
+      "setting": "indoors",
+      "hours": [
+        [
+          600,
+          1260
+        ],
+        [
+          660,
+          1260
+        ],
+        [
+          660,
+          1260
+        ],
+        [
+          660,
+          1260
+        ],
+        [
+          660,
+          1320
+        ],
+        [
+          660,
+          1320
+        ],
+        [
+          600,
+          1320
+        ]
+      ],
+      "sourceUrl": "https://www.timpanohydepark.com/",
+      "priceSourceUrl": "https://www.ubereats.com/store/timpano-hp/GhuaV2sHV6qYrqF4OdbTfg",
+      "menuUrl": "https://www.timpanohydepark.com/menu",
+      "reviewedOn": "2026-09-30",
+      "expiresOn": "2026-10-30",
+      "notes": "Operator lists Italian dining and branch hours; meal window ends one hour before published close. Exact-branch delivery menu shows pasta around $29-40 and premium steaks up to $76. Upscale is an editorial two-person band, not a dine-in bill; premium dishes, drinks and specials can exceed it. No table availability is claimed."
+    },
+    {
+      "license": "SEA3916891",
+      "plannerEligible": true,
+      "registryStreet": "1611 W SWANN AVE",
+      "name": "Irish 31 - Hyde Park",
+      "address": "1611 W Swann Ave, Tampa, FL 33606",
+      "neighborhood": "Hyde Park",
+      "cuisines": [
+        "American"
+      ],
+      "moods": ["playful", "relaxed"],
+      "priceBand": "moderate",
+      "setting": "indoors",
+      "hours": [
+        [
+          720,
+          1320
+        ],
+        [
+          720,
+          1260
+        ],
+        [
+          720,
+          1320
+        ],
+        [
+          720,
+          1320
+        ],
+        [
+          720,
+          1380
+        ],
+        [
+          660,
+          1380
+        ],
+        [
+          660,
+          1380
+        ]
+      ],
+      "sourceUrl": "https://irish31.com/hyde-park/",
+      "priceSourceUrl": "https://www.doordash.com/en-US/store/139163",
+      "menuUrl": "https://irish31.com/menu/",
+      "reviewedOn": "2026-09-30",
+      "expiresOn": "2026-10-30",
+      "notes": "Hyde Park pub at 1611 W Swann, not another Irish 31 branch. Operator lists a dine-in pub and patio; planner uses indoor setting. Meal window ends one hour before published pub close because kitchen cutoff is not verified. Moderate band is supported by the exact branch's merchant-set DoorDash menu ($17-23 examples, $$ category); delivery prices are not dine-in prices."
+    },
+    {
+      "license": "SEA3918427",
+      "plannerEligible": true,
+      "registryStreet": "1606 WEST SNOW AVENUE",
+      "name": "Meat Market Tampa",
+      "address": "1606 W Snow Ave, Tampa, FL 33606",
+      "neighborhood": "Hyde Park",
+      "cuisines": [
+        "American",
+        "Seafood"
+      ],
+      "moods": ["romantic", "dressy", "adventurous"],
+      "priceBand": "upscale",
+      "setting": "indoors",
+      "hours": [
+        [
+          1020,
+          1320
+        ],
+        [
+          1020,
+          1320
+        ],
+        [
+          1020,
+          1320
+        ],
+        [
+          1020,
+          1320
+        ],
+        [
+          1020,
+          1380
+        ],
+        [
+          1020,
+          1380
+        ],
+        [
+          1020,
+          1380
+        ]
+      ],
+      "sourceUrl": "https://www.meatmarket.net/location/meat-market-tampa/",
+      "priceSourceUrl": "https://www.opentable.com/restaurant/profile/1045930",
+      "menuUrl": "https://www.meatmarket.net/tampa/",
+      "reviewedOn": "2026-09-30",
+      "expiresOn": "2026-10-30",
+      "notes": "Tampa branch at 1606 W Snow Ave; dinner-only planner window ends one hour before published closing. OpenTable labels this branch $50 and over per person; operator-linked menu and merchant-set delivery menu confirm steakhouse/seafood offerings. Upscale is a broad band for two and premium steaks, sides, drinks and valet can exceed it. Indoor setting does not promise a particular table."
+    },
+    {
+      "license": "SEA3919086",
+      "plannerEligible": true,
+      "registryStreet": "722 S VILLAGE CIRCLE",
+      "name": "Sweetgreen - Hyde Park Village",
+      "address": "722 S Village Circle, Tampa, FL 33606",
+      "neighborhood": "Hyde Park",
+      "cuisines": [
+        "American",
+        "Vegetarian"
+      ],
+      "moods": ["relaxed"],
+      "priceBand": "budget",
+      "setting": "indoors",
+      "hours": [
+        [
+          630,
+          1200
+        ],
+        [
+          630,
+          1200
+        ],
+        [
+          630,
+          1200
+        ],
+        [
+          630,
+          1200
+        ],
+        [
+          630,
+          1200
+        ],
+        [
+          630,
+          1200
+        ],
+        [
+          630,
+          1200
+        ]
+      ],
+      "sourceUrl": "https://www.sweetgreen.com/locations/hyde-park-village",
+      "priceSourceUrl": "https://www.ubereats.com/store/sweetgreen-hyde-park-village/Aq99AvuoWwquw9ad-25egg",
+      "menuUrl": "https://www.sweetgreen.com/menu",
+      "reviewedOn": "2026-09-30",
+      "expiresOn": "2026-10-30",
+      "notes": "Hyde Park Village dine-in branch. Operator says 10:30 AM-9 PM daily; planner ends meals at 8 PM. Price band draws on this exact branch's delivery listing ($ category and roughly $13-20 bowls), not a dine-in quote. Seating and menu item availability are unconfirmed."
+    }
+  ]
 }

@@ -4,11 +4,11 @@ This roadmap is the recommended implementation order after the local CI and repo
 
 The current launch market remains Tampa. New venue facts must be verified from exact official sources, retain review dates and expiry dates, and remain separate from discovery-only DBPR records. The planner must continue to return named, feasible itineraries or an explicit no-match result; it must not invent availability, suitability, prices, hours, routes, or booking confirmations.
 
-Pricing now uses approximate bands for new plans. Restaurant records may use a sourced band instead of an exact menu subtotal; legacy subtotals are retained for compatibility. Budget handling rejects only when the low end of the approximate range exceeds the requested budget and warns if its high end does. No third-party price API is required. The DBPR list supplies identity/discovery, not verified cuisine, hours or a price band. Internal registry search and batch enrichment import exist, but the source facts must still be collected and reviewed before any new restaurant becomes planner eligible.
+Pricing now uses approximate bands for new plans. Restaurant records may use a sourced band instead of an exact menu subtotal; legacy subtotals are retained for compatibility. Budget handling rejects only when the low end of the approximate range exceeds the requested budget and warns if its high end does. No third-party price API is required. The DBPR list supplies identity/discovery, not verified cuisine, hours or a price band. Internal registry search and batch enrichment import have promoted four reviewed Hyde Park restaurants; source facts still require branch-specific review before further promotion.
 
 ## 1. Build Batch 2: Hyde Park / SoHo
 
-This is the next product milestone. Review the completed Batch 1 records first, then create a candidate queue for approximately 10–15 restaurants and 5–8 activities in Hyde Park / SoHo.
+This remains the next product milestone. The candidate queue exists and five restaurants / one activity are now integrated. Continue toward approximately 10–15 restaurants and 5–8 activities in Hyde Park / SoHo, prioritizing verified activity coverage and blocked restaurant evidence over raw DBPR counts.
 
 For every candidate:
 
