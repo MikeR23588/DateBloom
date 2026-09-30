@@ -3,6 +3,20 @@ import type { CatalogVenue } from "./venue-catalog";
 // Reviewed Hyde Park / SoHo records. Evidence and limits: docs/batch-two-source-reviews.md.
 export const batchTwoVenues: readonly CatalogVenue[] = [
   {
+    id: "green-lemon-soho", name: "Green Lemon - SoHo",
+    address: "915 S Howard Ave, Tampa, FL 33606", neighborhood: "Hyde Park",
+    sourceUrl: "https://www.eatgreenlemon.com/contact",
+    menuUrl: "https://www.eatgreenlemon.com/menu",
+    sourceCheckedOn: "2026-09-30", sourceExpiresOn: "2026-10-30",
+    // End meal planning one hour before the operator's published closing time.
+    hours: [[660, 1260], [660, 1260], [660, 1320], [660, 1260], [660, 1260], [660, 1320], [660, 1320]],
+    setting: "indoors", cuisines: ["Mexican"], moods: ["playful", "relaxed", "adventurous"],
+    subtotalForTwoCents: 3400,
+    costDescription: "Two all-day-menu chicken Fajita Bowls ($17 each); water assumed. Protein upgrades and drinks are excluded.",
+    planningNotes: ["This is the SoHo branch at 915 S Howard Ave. The published menu and operator-linked ordering menu both list the chicken Fajita Bowl at $17. Indoor table and meal availability are unconfirmed; the planning window ends one hour before published closing. SoHo is grouped under the Hyde Park request area."],
+    minimumMinutes: 60, maximumMinutes: 120,
+  },
+  {
     id: "candle-pour-hyde-park", name: "The Candle Pour - Hyde Park Village",
     address: "1619 W Snow Cir, Tampa, FL 33606", neighborhood: "Hyde Park",
     sourceUrl: "https://thecandlepour.com/pages/frequently-asked-questions",

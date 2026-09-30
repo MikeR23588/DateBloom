@@ -6,6 +6,7 @@ import { venueHoursOnDate } from "./venue-hours";
 
 const now = new Date("2026-09-30T12:00:00Z");
 const candle = venues.find(venue => venue.id === "candle-pour-hyde-park")!;
+const greenLemon = venues.find(venue => venue.id === "green-lemon-soho")!;
 function request(overrides: Record<string, unknown> = {}) {
   return dateRequestCreateSchema.parse({
     citySlug: "tampa", requestedLocalDate: "2026-10-01", alternativeLocalDates: [],
@@ -37,5 +38,26 @@ describe("Batch 2 Hyde Park activity", () => {
     }
     expect(() => generateDatePlan(request({ travelMode: "walking" }), now)).toThrow(NoMatchingPlanError);
     expect(() => generateDatePlan(request({ accessibilityNeeds: "step-free entry" }), now)).toThrow(NoMatchingPlanError);
+  });
+});
+
+describe("Batch 2 SoHo restaurant", () => {
+  it("pairs Green Lemon with Candle Pour within the exact estimated budget", () => {
+    const plan = generateDatePlan(request({ preferredCuisines: ["Mexican"], budgetLimitCents: 14660 }), now);
+    expect(plan.stops.map(stop => stop.venueId)).toEqual([greenLemon.id, candle.id]);
+    expect(plan.stops[0].sourceCheckedOn).toBe("2026-09-30");
+    expect(plan.stops[0].suggestedBudgetCents).toBe(5420);
+    expect(plan.estimatedTotalCents).toBe(14660);
+    expect(() => generateDatePlan(request({ preferredCuisines: ["Mexican"], budgetLimitCents: 14659 }), now)).toThrow(NoMatchingPlanError);
+  });
+
+  it("limits dinner to the conservative SoHo meal window and keeps unknown routes unresolved", () => {
+    const single = request({ preferredCuisines: ["Mexican"], preferredActivities: [], acceptsSingleStop: true,
+      startWindow: { startLocalTime: "19:00", endLocalTime: "19:01" }, durationMinutes: 120 });
+    expect(generateDatePlan(single, now).stops[0].venueId).toBe(greenLemon.id);
+    expect(() => generateDatePlan({ ...single, requestedLocalDate: "2026-10-05",
+      startWindow: { startLocalTime: "20:00", endLocalTime: "20:01" } }, now)).toThrow(NoMatchingPlanError);
+    expect(() => generateDatePlan(request({ preferredCuisines: ["Mexican"], travelMode: "walking" }), now)).toThrow(NoMatchingPlanError);
+    expect(() => generateDatePlan({ ...single, settingPreference: "outdoors" }, now)).toThrow(NoMatchingPlanError);
   });
 });

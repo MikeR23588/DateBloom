@@ -11,7 +11,16 @@ Reviewed September 30, 2026. The [Hyde Park Village directory](https://hydeparkv
 - Setting and route: indoor shop. No checked walking route from Forbici or other restaurants is recorded; flexible or driving requests use the existing disclosed 15-minute transition allowance. Accessibility and strict dietary facts remain unverified.
 - Review deadline: October 30, 2026. Recheck product prices, reservation terms, and experience hours before extending coverage.
 
+## Promoted: Green Lemon, SoHo
+
+- Identity and hours: the [operator's location page](https://www.eatgreenlemon.com/contact) identifies 915 S Howard Ave, Tampa, FL 33606, and publishes daily hours: Monday, Wednesday, Thursday, Sunday 11 AM–10 PM; Tuesday, Friday, Saturday 11 AM–11 PM. SoHo is grouped with the existing Hyde Park request area. The catalog conservatively ends meal planning one hour before each published closing time; this is a planner safety margin, not a claimed kitchen cutoff.
+- Price and cuisine: the [operator's all-day menu](https://www.eatgreenlemon.com/menu) lists a chicken Fajita Bowl at $17. The [operator-linked order page](https://order.eatgreenlemon.com/) separately lists it at $17 for this address. Two bowls cost $34 before DateBloom's existing meal tax/tip and contingency allowances ($54.20 estimated total). No protein upgrade, drink, or special is assumed. The operator identifies the cuisine as Mexican-inspired.
+- Setting and limits: indoor restaurant dining; a particular indoor table is not confirmed. No booking or live availability is claimed. Exact kitchen cutoff, strict dietary suitability, accessibility, parking cost, and checked walking routes are unverified. The direct online-order link is a menu cross-check, not a dine-in reservation.
+- Review deadline: October 30, 2026. Recheck price, service hours, and branch status before extending coverage.
+
 ## Research decisions
+
+The [Daily Eats operator-linked ordering page](https://order.ilovedailyeats.com/) currently labels its 901 S Howard Ave location “New Meeting House.” Older Daily Eats menu snapshots cannot establish the current restaurant identity or service hours, so this lead is blocked pending direct confirmation.
 
 The [Timpano dinner menu](https://www.timpanohydepark.com/menu) lists dishes but omits item prices. [Irish 31's Hyde Park page](https://irish31.com/hyde-park/) has current branch hours, while its [operator menu](https://irish31.com/menu/) omits meal prices; a 2023 priced PDF is too old to establish a September 2026 budget. [Ro's current dinner menu](https://www.rohydepark.com/menu/dinner/) similarly omits entrée prices and discloses an additional 3% card processing fee. [Bartaco's Tampa page](https://bartaco.com/location/tampa/) says “11am–late,” without a usable daily closing time or menu prices. [On Swann's linked dinner PDF](https://www.onswann.com/s/22125-Dinner-Menu-Print.pdf) bears a 2025 date and may not match today's seasonal menu. These restaurants remain research candidates.
 

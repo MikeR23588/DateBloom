@@ -28,7 +28,7 @@ describe("batch one completion", () => {
   it("adds exactly twelve restaurants and five activities without duplicate IDs", () => {
     expect(restaurants).toHaveLength(12);
     expect(activities).toHaveLength(5);
-    expect(catalog.venues.filter(venue => venue.cuisines)).toHaveLength(19);
+    expect(catalog.venues.filter(venue => venue.cuisines)).toHaveLength(20);
     expect(new Set(catalog.venues.map(venue => venue.id)).size).toBe(catalog.venues.length);
   });
   it.each(restaurants)("generates a full meal at $id's exact budget and rejects one cent less", async venue => {
