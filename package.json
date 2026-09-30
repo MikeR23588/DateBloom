@@ -9,7 +9,8 @@
                     "test":  "pnpm --filter @datebloom/web test",
                     "test:browser":  "pnpm --filter @datebloom/web test:browser",
                     "restaurants:refresh": "pnpm --filter @datebloom/web restaurants:refresh",
-                    "restaurants:review": "pnpm --filter @datebloom/web restaurants:review"
+                    "restaurants:review": "pnpm --filter @datebloom/web restaurants:review",
+                    "hooks": "git config core.hooksPath .githooks"
                 },
     "engines":  {
                     "node":  "\u003e=24.15.0"
