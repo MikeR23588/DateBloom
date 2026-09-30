@@ -1,0 +1,17 @@
+{
+    "name":  "date-planner",
+    "private":  true,
+    "packageManager":  "pnpm@10.12.4",
+    "scripts":  {
+                    "dev":  "pnpm --filter @date-planner/web dev",
+                    "lint":  "pnpm --filter @date-planner/web lint",
+                    "typecheck":  "pnpm --filter @date-planner/web typecheck",
+                    "test":  "pnpm --filter @date-planner/web test",
+                    "test:browser":  "pnpm --filter @date-planner/web test:browser",
+                    "restaurants:refresh": "pnpm --filter @date-planner/web restaurants:refresh",
+                    "restaurants:review": "pnpm --filter @date-planner/web restaurants:review"
+                },
+    "engines":  {
+                    "node":  "\u003e=24.15.0"
+                }
+}

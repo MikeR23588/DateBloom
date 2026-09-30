@@ -1,0 +1,80 @@
+DATE PLANNER - LOCAL STARTUP
+
+Prerequisites
+-------------
+- Node.js 24.15 or newer
+- pnpm 10
+
+Start the project (PowerShell)
+------------------------------
+1. Open PowerShell.
+2. Move to the project folder:
+
+   cd D:\Michael\Programming\ProjectsV2\DatePlanner
+
+3. Install dependencies (needed the first time, or after package changes):
+
+   pnpm install
+
+4. Optional: create the local environment file:
+
+   Copy-Item .env.example apps\web\.env.local
+
+   The default SQLite database is data\date-planner.sqlite.
+
+5. Start the development server:
+
+   pnpm dev
+
+6. Open the site in a browser:
+
+   http://localhost:3000
+
+Stop the server
+---------------
+Press Ctrl+C in the PowerShell window running pnpm dev.
+
+Useful commands
+---------------
+Run unit tests:
+
+   pnpm test
+
+Run linting:
+
+   pnpm lint
+
+Run TypeScript checks:
+
+   pnpm typecheck
+
+Run the live browser acceptance checks:
+
+   pnpm test:browser
+
+Build the production app:
+
+   pnpm --filter @date-planner/web build
+
+Start the production build after building:
+
+   pnpm --filter @date-planner/web start
+
+Optional restaurant discovery commands
+---------------------------------------
+Refresh the local Florida DBPR discovery registry:
+
+   pnpm restaurants:refresh
+
+Search the discovery registry:
+
+   pnpm restaurants:review --city TAMPA --search "NUEVA CANTINA"
+
+Notes
+-----
+- The database and Tampa coverage initialize automatically.
+- No Docker, external database, cloud account, or privileged account is required.
+- The app currently runs locally on one machine using SQLite.
+- If Chrome is missing for browser checks, install it with:
+
+   pnpm --filter @date-planner/web exec puppeteer browsers install chrome

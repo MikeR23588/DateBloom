@@ -1,0 +1,16 @@
+node_modules/
+.next/
+.turbo/
+coverage/
+.verification-tmp/
+.env
+.env.*
+!.env.example
+apps/web/.env.local
+
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/restaurant-registry.json
+data/restaurant-registry.json.lock
+data/restaurant-registry.json.*.tmp
