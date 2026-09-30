@@ -1,4 +1,4 @@
-# Date Planner
+# DateBloom
 
 Automatic date planning for Tampa. Enter a schedule, budget, neighborhood, and preferences to get a named venue itinerary. Plans are saved locally and shown in My Dates.
 

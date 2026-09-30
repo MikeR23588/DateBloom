@@ -1,6 +1,7 @@
 node_modules/
 .next/
 .turbo/
+*.tsbuildinfo
 coverage/
 .verification-tmp/
 .env
